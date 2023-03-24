@@ -1,0 +1,26 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          FILTER_REGEX_EXCLUDE: .*tests/fixtures/.*|.*plugin/glob2/.*
+          LINTER_RULES_PATH: /
+          PYTHON_BLACK_CONFIG_FILE: pyproject.toml
+          PYTHON_FLAKE8_CONFIG_FILE: .flake8
+          PYTHON_ISORT_CONFIG_FILE: pyproject.toml
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_PYLINT: false

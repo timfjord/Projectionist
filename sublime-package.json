@@ -1,0 +1,54 @@
+{
+    "contributions": {
+        "settings": [
+            {
+                "file_patterns": [
+                    "/Projectionist.sublime-settings"
+                ],
+                "schema": {
+                    "$id": "sublime://settings/Projectionist",
+                    "definitions": {
+                        "PackageConfig": {
+                            "properties": {
+                                "log_level": {
+                                    "type": "string",
+                                    "default": "WARNING",
+                                    "enum": [
+                                        "DEBUG",
+                                        "INFO",
+                                        "WARNING",
+                                        "ERROR",
+                                        "CRITICAL"
+                                    ],
+                                    "description": "Package log level"
+                                },
+                                "show_status_messages": {
+                                    "type": "boolean",
+                                    "default": true,
+                                    "description": "Show important messages in the sublime status bar"
+                                },
+                            }
+                        }
+                    },
+                    "$ref": "sublime://settings/Projectionist#/definitions/PackageConfig"
+                }
+            },
+            {
+                "file_patterns": [
+                    "/*.sublime-project"
+                ],
+                "schema": {
+                    "properties": {
+                        "settings": {
+                            "properties": {
+                                "Projectionist": {
+                                    "$ref": "sublime://settings/Projectionist#/definitions/PackageConfig"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

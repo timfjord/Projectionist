@@ -1,0 +1,5 @@
+{
+    // Available log levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    "log_level": "WARNING",
+    "show_status_messages": true
+}
