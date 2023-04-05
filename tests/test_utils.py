@@ -99,3 +99,32 @@ class UtilsTestCase(unittest.TestCase):
             ).items(),
             OrderedDict(key={"alternate": "alternate", "key": "value"}).items(),
         )
+
+    def test_merge_skip(self):
+        self.assertEqual(
+            utils.merge(
+                {
+                    "key": {
+                        "alternate": "alternate",
+                    }
+                },
+                {
+                    "key": "skip",
+                },
+            ).items(),
+            OrderedDict(key={}).items(),
+        )
+
+        self.assertEqual(
+            utils.merge(
+                {
+                    "key": "skip",
+                },
+                {
+                    "key": {
+                        "alternate": "alternate",
+                    }
+                },
+            ).items(),
+            OrderedDict(key={"alternate": "alternate"}).items(),
+        )

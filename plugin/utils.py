@@ -9,10 +9,17 @@ def to_list(val):
     return val if isinstance(val, list) else [val]
 
 
+SKIP = "skip"
 SPECIAL_KEYS = ("alternate",)
 
 
 def _handle_nested(dict1, dict2):
+    if dict1 == SKIP:
+        dict1 = {}
+
+    if dict2 == SKIP:
+        return {}
+
     if not isinstance(dict1, dict) or not isinstance(dict2, dict):
         raise TypeError("both arguments must be dicts")
 
