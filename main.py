@@ -11,3 +11,12 @@ for module_name in [
 ]:
     del sys.modules[module_name]
 # --- Clear module cache ---
+
+import sublime_plugin  # noqa: E402
+
+from .plugin import Plugin  # noqa: E402
+
+
+class ProjectionistOpenAlternateCommand(sublime_plugin.TextCommand):
+    def run(self, _):
+        Plugin(self.view).open_alternate()

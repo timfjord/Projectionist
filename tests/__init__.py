@@ -1,9 +1,14 @@
 # isort:skip_file
 
+import os
+
 import sublime
 from unittesting import DeferrableTestCase
 
 from Projectionist.plugin import cache, settings
+
+FIXTURES_PATH = os.path.join(os.path.dirname(__file__), "fixtures")
+ST3 = sublime.version() < "4000"
 
 
 class SublimeWindowTestCase(DeferrableTestCase):

@@ -27,6 +27,24 @@
                                     "default": true,
                                     "description": "Show important messages in the sublime status bar"
                                 },
+                                "subprojects": {
+                                    "type": "array",
+                                    "default": [],
+                                    "description": "A list of subprojects",
+                                    "items": {
+                                        "anyOf": [
+                                            {
+                                                "type": "string"
+                                            },
+                                            {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
                             }
                         }
                     },

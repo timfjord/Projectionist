@@ -1,0 +1,23 @@
+{
+    // Available log levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+    "log_level": "WARNING",
+    "show_status_messages": true,
+    // A list of subprojects
+    "subprojects": [],
+    // lookup order
+    "lookup_order": [
+        "local",
+        "file",
+        "global",
+        "builtin"
+    ],
+    "create_alternate_file_if_missing": true,
+    // built-in heuristic projections
+    "builtin_heuristic_projections": {
+        "**/*": {
+            "*.py": {
+                "alternate": "{}_test.py",
+            }
+        }
+    }
+}
