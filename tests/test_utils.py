@@ -36,7 +36,7 @@ class UtilsTestCase(unittest.TestCase):
         with self.assertRaises(TypeError):
             utils.merge(
                 {"foo": {"bar": 1}},
-                {"baz": "qux"},
+                {"baz": "quux"},
             )
 
         with self.assertRaises(TypeError):

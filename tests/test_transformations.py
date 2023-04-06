@@ -1,160 +1,118 @@
 import unittest
 
-from Projectionist.plugin import errors, transformations
+from Projectionist.plugin import transformations
 
 
 class TransformationsTestCase(unittest.TestCase):
-    def test_apply(self):
+    def test_dot(self):
         self.assertEqual(
-            transformations.apply("dot", "foo/bar"),
+            transformations.dot("foo/bar"),
             "foo.bar",
         )
 
-    def test_apply_with_spaces(self):
+    def test_underscore(self):
         self.assertEqual(
-            transformations.apply("  dot  ", "foo/bar"),
-            "foo.bar",
-        )
-
-    def test_apply_no_filter(self):
-        self.assertEqual(
-            transformations.apply("", "foo/bar"),
-            "foo/bar",
-        )
-
-    def test_apply_invalid_filter(self):
-        with self.assertRaises(errors.Error):
-            self.assertEqual(
-                transformations.apply("__unKn0wn__", "foo/bar"),
-                "foo/bar",
-            )
-
-    def test_apply_chain(self):
-        self.assertEqual(
-            transformations.apply_chain(["dot", "uppercase"], "foo/bar"),
-            "FOO.BAR",
-        )
-
-    def test_apply_chain_with_spaces(self):
-        self.assertEqual(
-            transformations.apply_chain(["  dot  ", "  uppercase  "], "foo/bar"),
-            "FOO.BAR",
-        )
-
-    def test_apply_chain_no_transformations(self):
-        self.assertEqual(
-            transformations.apply_chain([], "foo"),
-            "foo",
-        )
-
-    def test_apply_chain_post_split(self):
-        self.assertEqual(
-            transformations.apply_chain([""], "foo"),
-            "foo",
-        )
-
-    def test_apply_chain_invalid_filter(self):
-        with self.assertRaises(errors.Error):
-            self.assertEqual(
-                transformations.apply_chain(["dot", "__unKn0wn__"], "foo/bar"),
-                "foo/bar",
-            )
-
-    def test_dot_transformation(self):
-        self.assertEqual(
-            transformations.dot_transformation("foo/bar"),
-            "foo.bar",
-        )
-
-    def test_underscore_transformation(self):
-        self.assertEqual(
-            transformations.underscore_transformation("foo/bar"),
+            transformations.underscore("foo/bar"),
             "foo_bar",
         )
 
-    def test_backslash_transformation(self):
+    def test_backslash(self):
         self.assertEqual(
-            transformations.backslash_transformation("foo/bar"),
+            transformations.backslash("foo/bar"),
             "foo\\bar",
         )
 
-    def test_colons_transformation(self):
+    def test_colons(self):
         self.assertEqual(
-            transformations.colons_transformation("foo/bar"),
+            transformations.colons("foo/bar"),
             "foo::bar",
         )
 
-    def test_hyphenate_transformation(self):
+    def test_hyphenate(self):
         self.assertEqual(
-            transformations.hyphenate_transformation("foo_bar"),
+            transformations.hyphenate("foo_bar"),
             "foo-bar",
         )
 
-    def test_blank_transformation(self):
+    def test_blank(self):
         self.assertEqual(
-            transformations.blank_transformation("foo_bar"),
+            transformations.blank("foo_bar"),
             "foo bar",
         )
 
-    def test_uppercase_transformation(self):
+    def test_uppercase(self):
         self.assertEqual(
-            transformations.uppercase_transformation("foo/bar"),
+            transformations.uppercase("foo/bar"),
             "FOO/BAR",
         )
 
-    def test_camelcase_transformation(self):
+    def test_camelcase(self):
         self.assertEqual(
-            transformations.camelcase_transformation("foo-bar_baz"),
+            transformations.camelcase("foo-bar_baz"),
             "fooBarBaz",
         )
 
-    def test_capitalize_transformation(self):
+    def test_capitalize(self):
         self.assertEqual(
-            transformations.capitalize_transformation("foo/bar"),
-            "FooBar",
+            transformations.capitalize("foo/bar"),
+            "Foo/Bar",
         )
 
-    def test_snakecase_transformation(self):
+    def test_snakecase(self):
+        # self.assertEqual(
+        #     transformations.capitalize("FooBar/bazQuux"),
+        #     "foo_bar/baz_quux",
+        # )
         pass
 
-    def test_dirname_transformation(self):
+    def test_dirname(self):
         self.assertEqual(
-            transformations.dirname_transformation("foo/bar/baz"),
+            transformations.dirname("foo/bar/baz"),
             "foo/bar",
         )
 
-    def test_basename_transformation(self):
         self.assertEqual(
-            transformations.basename_transformation("foo/bar/baz"),
+            transformations.dirname("foo\\bar\\baz"),
+            "foo\\bar",
+        )
+
+    def test_basename(self):
+        self.assertEqual(
+            transformations.basename("foo/bar/baz"),
             "baz",
         )
 
-    def test_singular_transformation(self):
-        pass
-
-    def test_plural_transformation(self):
-        pass
-
-    def test_open_transformation(self):
         self.assertEqual(
-            transformations.open_transformation("foo/bar/baz"),
+            transformations.basename("foo\\bar\\baz"),
+            "baz",
+        )
+
+    def test_singular(self):
+        pass
+
+    def test_plural(self):
+        pass
+
+    def test_open(self):
+        self.assertEqual(
+            transformations.open("foo/bar/baz"),
             "{",
         )
 
-    def test_close_transformation(self):
+    def test_close(self):
         self.assertEqual(
-            transformations.close_transformation("foo/bar/baz"),
+            transformations.close("foo/bar/baz"),
             "}",
         )
 
-    def test_nothing_transformation(self):
+    def test_nothing(self):
         self.assertEqual(
-            transformations.nothing_transformation("foo/bar/baz"),
+            transformations.nothing("foo/bar/baz"),
             "",
         )
 
-    def test_vim_transformation(self):
+    def test_vim(self):
         self.assertEqual(
-            transformations.vim_transformation("foo/bar/baz"),
+            transformations.vim("foo/bar/baz"),
             "foo/bar/baz",
         )

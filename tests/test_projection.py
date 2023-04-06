@@ -68,10 +68,11 @@ class ProjectionTestCase(unittest.TestCase):
 
     def test_match(self):
         projection = Projection("*", {})
-        match = projection.match(self.root.file("foo.py"))
+        file = self.root.file("foo.py")
+        match = projection.match(file)
 
         self.assertIsInstance(match, MatchedProjection)
-        self.assertEqual(match.root, self.root)
+        self.assertEqual(match.file, file)
         self.assertEqual(match.projection, projection)
         self.assertEqual(
             match.match,
@@ -91,10 +92,17 @@ class ProjectionTestCase(unittest.TestCase):
         )
 
         self.assertEqual(
-            Projection("foo/**/baz/*.py", {})
-            .match(self.root.file("foo", "bar", "baz", "qux.py"))
+            Projection("foo/**/bar_*.py", {})
+            .match(self.root.file("foo", "bar_baz.py"))
             .match,
-            "bar/qux",
+            "baz",
+        )
+
+        self.assertEqual(
+            Projection("foo/**/baz/*.py", {})
+            .match(self.root.file("foo", "bar", "baz", "quux.py"))
+            .match,
+            "bar/quux",
         )
 
         self.assertEqual(
@@ -119,29 +127,38 @@ class ProjectionTestCase(unittest.TestCase):
 class TestMatchedProjection(unittest.TestCase):
     def setUp(self):
         self.root = Root("~")
+        self.file = self.root.file("file.py")
 
     def test_alternate(self):
         alternate = MatchedProjection(
-            self.root,
+            self.file,
             Projection("foo/**/baz/*.py", {"alternate": ["dir1/{}.py", "dir2/{}.py"]}),
-            "bar/qux",
+            "bar/quux",
         ).alternate
 
         self.assertIsInstance(alternate, GeneratorType)
         self.assertEqual(
             list(alternate),
             [
-                self.root.file("dir1", "bar", "qux.py"),
-                self.root.file("dir2", "bar", "qux.py"),
+                self.root.file("dir1", "bar", "quux.py"),
+                self.root.file("dir2", "bar", "quux.py"),
             ],
         )
 
     def test_template(self):
         template = MatchedProjection(
-            self.root,
+            self.file,
             Projection(
-                "foo/**/baz/*.py", {"template": ["class {capitalize}:", "    pass"]}
+                "foo/**/baz/*.py", {"template": ["def {underscore}():", "    pass"]}
             ),
-            "bar/qux",
+            "bar/quux",
         ).template
-        self.assertEqual(template, "class BarQux:\n    pass")
+        self.assertEqual(template, "def bar_quux():\n    pass")
+
+    def test_dynamic_transformations(self):
+        template = MatchedProjection(
+            self.file,
+            Projection("_", {"template": ["{project}", "{file}"]}),
+            "_",
+        ).template
+        self.assertEqual(template, "{}\n{}".format(self.file.root.path, self.file.path))

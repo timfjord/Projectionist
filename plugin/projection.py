@@ -34,7 +34,7 @@ class Projection:
         path = file.relpath.replace("\\", "/")
 
         if self.pattern == path:
-            return MatchedProjection(file.root, self, "")
+            return MatchedProjection(file, self, "")
 
         try:
             prefix, infix, suffix = re.split(r"\*\*?", self.pattern)
@@ -48,43 +48,52 @@ class Projection:
         match = path[len(prefix) : to]
 
         if infix != "/":
-            clean = match.replace(infix, "/", 1)
+            clean = "/{}".format(match).replace(infix, "/", 1)[1:]
 
             if clean != match:
                 match = clean
 
-        return MatchedProjection(file.root, self, match)
+        return MatchedProjection(file, self, match)
 
-    def find_alternate_file(self, path):
+    def find_alternate_file(self, file):
         if not bool(self.alternate):
             return None
 
-        match = self.match(path)
+        match = self.match(file)
 
         return match.alternate if match else None
 
-    def find_template(self, path):
+    def find_template(self, file):
         if not bool(self.template):
             return None
 
-        match = self.match(path)
+        match = self.match(file)
 
         return match.template if match else None
 
 
 class MatchedProjection:
-    def __init__(self, root, projection, match):
-        self.root = root
+    def __init__(self, file, projection, match):
+        self.file = file
         self.projection = projection
         self.match = match
+
+    def render_template(self, source):
+        return Template(
+            source,
+            {
+                "file": lambda _: self.file.path,
+                "project": lambda _: self.file.root.path,
+            },
+        ).render(self.match)
 
     @property
     def alternate(self):
         return (
-            self.root.file(*Template(alternate).render(self.match).split("/"))
+            self.file.root.file(*self.render_template(alternate).split("/"))
             for alternate in self.projection.alternate
         )
 
     @property
     def template(self):
-        return Template(self.projection.template).render(self.match)
+        return self.render_template(self.projection.template)

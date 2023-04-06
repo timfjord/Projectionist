@@ -1,64 +1,40 @@
 import re
-from functools import reduce
-
-from .errors import Error
 
 
-def apply(name, value):
-    if not bool(name):
-        return value
-
-    name = str(name).strip()
-
-    try:
-        return globals()["{}_transformation".format(name)](value)
-    except KeyError:
-        raise Error("Unknown transformation: '{}'".format(name))
-
-
-def apply_chain(transformations, value):
-    return reduce(lambda v, f: apply(f, v), transformations, value)
-
-
-def dot_transformation(value):
+def dot(value):
     return value.replace("/", ".")
 
 
-def underscore_transformation(value):
+def underscore(value):
     return value.replace("/", "_")
 
 
-def backslash_transformation(value):
+def backslash(value):
     return value.replace("/", "\\")
 
 
-def colons_transformation(value):
+def colons(value):
     return value.replace("/", "::")
 
 
-def hyphenate_transformation(value):
+def hyphenate(value):
     return value.replace("_", "-")
 
 
-def blank_transformation(value):
+def blank(value):
     return re.sub(r"[_-]", " ", value)
 
 
-def uppercase_transformation(value):
+def uppercase(value):
     return value.upper()
 
 
-def camelcase_transformation(value):
+def camelcase(value):
     return re.sub(r"[_-](.)", lambda m: m.group(1).upper(), value)
 
 
-# function! g:projectionist_transformations.capitalize(input, o) abort
-#   return substitute(a:input, '\%(^\|/\)\zs\(.\)', '\u\1', 'g')
-# endfunction
-
-
-def capitalize_transformation(value):
-    return re.sub(r"(?:^|/)(.)", lambda m: m.group(1).upper(), value)
+def capitalize(value):
+    return re.sub(r"(^|/)(.)", lambda m: m.group(1) + m.group(2).upper(), value)
 
 
 # function! g:projectionist_transformations.snakecase(input, o) abort
@@ -70,7 +46,7 @@ def capitalize_transformation(value):
 # endfunction
 
 
-def snakecase_transformation(value):
+def snakecase(value):
     return re.sub(
         r"(\u+)(\u\l)",
         r"\1_\2",
@@ -82,22 +58,12 @@ def snakecase_transformation(value):
     ).lower()
 
 
-# function! g:projectionist_transformations.dirname(input, o) abort
-#   return substitute(a:input, '.[^'.projectionist#slash().'/]*$', '', '')
-# endfunction
+def dirname(value):
+    return re.sub(r".[^/\\]*$", "", value)
 
 
-def dirname_transformation(value):
-    return re.sub(r".[^/]*$", "", value)
-
-
-# function! g:projectionist_transformations.basename(input, o) abort
-#   return substitute(a:input, '.*['.projectionist#slash().'/]', '', '')
-# endfunction
-
-
-def basename_transformation(value):
-    return re.sub(r".*/", "", value)
+def basename(value):
+    return re.sub(r".*[/\\]", "", value)
 
 
 # function! g:projectionist_transformations.singular(input, o) abort
@@ -111,7 +77,7 @@ def basename_transformation(value):
 # endfunction
 
 
-def singular_transformation(value):
+def singular(value):
     return re.sub(r"([Mm]ov|[aeio])@<!ies$", "ys", re.sub(r"[rl]@<=ves$", "fs", value))
 
 
@@ -126,21 +92,21 @@ def singular_transformation(value):
 # endfunction
 
 
-def plural_transformation(value):
+def plural(value):
     return re.sub(r"[aeio]@<!y$", "ie", re.sub(r"[rl]@<=f$", "ve", value))
 
 
-def open_transformation(value):
+def open(_):
     return "{"
 
 
-def close_transformation(value):
+def close(_):
     return "}"
 
 
-def nothing_transformation(value):
+def nothing(_):
     return ""
 
 
-def vim_transformation(value):
+def vim(value):
     return value
