@@ -1,4 +1,4 @@
 [run]
 omit =
-    1_logging.py
+    */1_logging.py
     */tests/*
