@@ -1,6 +1,6 @@
 import sublime
 
-from . import cache, settings
+from . import cache, settings, status
 from .errors import handle_errors
 from .root import Root
 from .storage import Storage
@@ -69,7 +69,7 @@ class Plugin:
             to_open = to_create
 
         if to_open is None:
-            print("NO ALTERNATE!!!!!!")
+            status.update("No alternate file defined")
         else:
             self.window.open_file(to_open.path)
 
