@@ -52,7 +52,6 @@
                                         "local",
                                         "file",
                                         "global",
-                                        // "third_party",
                                         "builtin"
                                     ],
                                     "description": "Lookup order",
@@ -62,7 +61,6 @@
                                             "local",
                                             "file",
                                             "global",
-                                            // "third_party",
                                             "builtin"
                                         ]
                                     }

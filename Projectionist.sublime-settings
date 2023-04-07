@@ -9,7 +9,6 @@
         "local", // first look in the project settings
         "file", // then, in the .projections.json file
         "global", // then the `heuristic_projections` from the package settings
-        // "third_party", //
         "builtin", // and finally, the `builtin_heuristic_projections`
     ],
     "create_alternate_file_if_missing": true,
