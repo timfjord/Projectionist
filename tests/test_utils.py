@@ -26,18 +26,29 @@ class UtilsTestCase(unittest.TestCase):
             utils.merge(
                 {"key1": {"foo": 1}, "key2": {"foo": 1, "bar": 2}},
                 {"key2": {"bar": 3}, "key3": {"foo": 1}},
-            ).items(),
+            ),
             OrderedDict(
-                key1={"foo": 1}, key2={"foo": 1, "bar": 3}, key3={"foo": 1}
-            ).items(),
+                (
+                    ("key2", {"foo": 1, "bar": 3}),
+                    ("key3", {"foo": 1}),
+                    ("key1", {"foo": 1}),
+                )
+            ),
         )
 
     def test_merge_nested_keys_not_dicts(self):
-        with self.assertRaises(TypeError):
+        self.assertEqual(
             utils.merge(
                 {"foo": {"bar": 1}},
                 {"baz": "quux"},
-            )
+            ),
+            OrderedDict(
+                (
+                    ("baz", "quux"),
+                    ("foo", {"bar": 1}),
+                )
+            ),
+        )
 
         with self.assertRaises(TypeError):
             utils.merge(
@@ -61,8 +72,8 @@ class UtilsTestCase(unittest.TestCase):
                         "append_alternate": "a2",
                     }
                 },
-            ).items(),
-            OrderedDict(key={"alternate": ["a0", "a1", "a2"]}).items(),
+            ),
+            OrderedDict((("key", {"alternate": ["a0", "a1", "a2"]}),)),
         )
 
     def test_merge_alternate_key_remove_prepend_append(self):
@@ -79,8 +90,8 @@ class UtilsTestCase(unittest.TestCase):
                         "alternate": "alternate",
                     }
                 },
-            ).items(),
-            OrderedDict(key={"alternate": "alternate"}).items(),
+            ),
+            OrderedDict((("key", {"alternate": "alternate"}),)),
         )
 
     def test_merge_alternate_key_not_array(self):
@@ -96,8 +107,8 @@ class UtilsTestCase(unittest.TestCase):
                         "key": "value",
                     }
                 },
-            ).items(),
-            OrderedDict(key={"alternate": "alternate", "key": "value"}).items(),
+            ),
+            OrderedDict((("key", {"alternate": "alternate", "key": "value"}),)),
         )
 
     def test_merge_skip(self):
@@ -111,8 +122,8 @@ class UtilsTestCase(unittest.TestCase):
                 {
                     "key": "skip",
                 },
-            ).items(),
-            OrderedDict(key={}).items(),
+            ),
+            OrderedDict((("key", {}),)),
         )
 
         self.assertEqual(
@@ -125,6 +136,6 @@ class UtilsTestCase(unittest.TestCase):
                         "alternate": "alternate",
                     }
                 },
-            ).items(),
-            OrderedDict(key={"alternate": "alternate"}).items(),
+            ),
+            OrderedDict((("key", {"alternate": "alternate"}),)),
         )

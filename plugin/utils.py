@@ -13,7 +13,7 @@ SKIP = "skip"
 SPECIAL_KEYS = ("alternate",)
 
 
-def _handle_nested(dict1, dict2):
+def _merge_nested(dict1, dict2):
     if dict1 == SKIP:
         dict1 = {}
 
@@ -46,9 +46,9 @@ def _handle_nested(dict1, dict2):
 
 
 def merge(dict1, dict2):
-    result = OrderedDict(dict1)
+    result = OrderedDict(dict2)
 
-    for key, val in dict2.items():
-        result[key] = _handle_nested(dict1.get(key, {}), val)
+    for key, val in dict1.items():
+        result[key] = _merge_nested(val, dict2.get(key, {}))
 
     return result
