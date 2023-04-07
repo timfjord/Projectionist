@@ -45,8 +45,8 @@ class UtilsTestCase(unittest.TestCase):
     def test_merge(self):
         self.assertEqual(
             utils.merge(
-                {"key1": {"foo": 1}, "key2": {"foo": 1, "bar": 2}},
-                {"key2": {"bar": 3}, "key3": {"foo": 1}},
+                OrderedDict((("key1", {"foo": 1}), ("key2", {"foo": 1, "bar": 2}))),
+                OrderedDict((("key2", {"bar": 3}), ("key3", {"foo": 1}))),
             ),
             OrderedDict(
                 (
