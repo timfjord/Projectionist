@@ -179,7 +179,9 @@ class RelativePathTestCase(unittest.TestCase):
 
         self.assertEqual(
             repr(relative_path),
-            "RelativePath('{}', '{}')".format(self.root, os.path.join('folder', 'file.py')),
+            "RelativePath('{}', '{}')".format(
+                self.root, os.path.join("folder", "file.py")
+            ),
         )
 
     def test_eq(self):
@@ -207,7 +209,7 @@ class FileTestCase(unittest.TestCase):
 
         self.assertEqual(
             repr(relative_path),
-            "File('{}', '{}')".format(root, os.path.join('folder', 'file.py')),
+            "File('{}', '{}')".format(root, os.path.join("folder", "file.py")),
         )
 
     def test_exists_checks_if_file_exists(self):
