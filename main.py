@@ -20,3 +20,13 @@ from .plugin import Plugin  # noqa: E402
 class ProjectionistOpenAlternateCommand(sublime_plugin.TextCommand):
     def run(self, _):
         Plugin(self.view).open_alternate()
+
+
+class ProjectionistOutputProjectionsCommand(sublime_plugin.TextCommand):
+    def run(self, _):
+        Plugin(self.view).output_projections()
+
+
+class ProjectionistClearCacheCommand(sublime_plugin.TextCommand):
+    def run(self, _):
+        Plugin.clear_cache()

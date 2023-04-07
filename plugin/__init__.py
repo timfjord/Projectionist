@@ -1,12 +1,16 @@
 import sublime
 
-from . import settings
+from . import cache, settings
 from .errors import handle_errors
 from .root import Root
 from .storage import Storage
 
 
 class Plugin:
+    @staticmethod
+    def clear_cache():
+        cache.clear()
+
     def __init__(self, view):
         self.view = view
 
@@ -68,3 +72,12 @@ class Plugin:
             print("NO ALTERNATE!!!!!!")
         else:
             self.window.open_file(to_open.path)
+
+    def output_projections(self):
+        storage = Storage(Root(self.window.folders()[0]))
+
+        print("\nProjections for '{}':\n".format(storage.root))
+
+        for projection in storage.get_projections():
+            print("  -> {}".format(projection.pattern))
+            print("     {}".format(projection.options))

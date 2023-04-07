@@ -1,1 +1,32 @@
-[]
+[
+    {
+        "caption": "Preferences: Projectionist Settings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "${packages}/Projectionist/Projectionist.sublime-settings",
+            "user_file": "${packages}/User/Projectionist.sublime-settings",
+            "default": "// Settings in here override those in \"Projectionist/Projectionist.sublime-settings\"\n{\n\t$0\n}\n"
+        }
+    },
+    {
+        "caption": "Preferences: Projectionist Key Bindings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "${packages}/Projectionist/Default.sublime-keymap",
+            "user_file": "${packages}/User/Default ($platform).sublime-keymap",
+            "default": "[\n\t$0\n]\n",
+        }
+    },
+    {
+        "caption": "Projectionist: Open alternate",
+        "command": "projectionist_open_alternate",
+    },
+    {
+        "caption": "Projectionist: Output projections",
+        "command": "projectionist_output_projections",
+    },
+    {
+        "caption": "Projectionist: Clear cache",
+        "command": "projectionist_clear_cache",
+    },
+]

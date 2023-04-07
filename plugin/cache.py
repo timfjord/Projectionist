@@ -19,7 +19,7 @@ def lru_cache(func):
 
 
 def _get_window_id():
-    return getattr(sublime.active_window(), "id", None)
+    return getattr(sublime.active_window(), "id", lambda: None)()
 
 
 def window_cache(key):
@@ -50,4 +50,4 @@ def clear():
     for func in _cache:
         func.cache_clear()
 
-    del _window_cache[_get_window_id()]
+    _window_cache.pop(_get_window_id(), None)
