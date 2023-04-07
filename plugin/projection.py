@@ -12,7 +12,6 @@ class Projection:
 
         self.pattern = (
             re.sub(r"\*", "**/*", pattern)
-            # TODO: check me again
             if re.match(r"^[^*{}]*\*[^*{}]*$", pattern)
             else pattern
         )
