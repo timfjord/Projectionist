@@ -21,6 +21,27 @@ class UtilsTestCase(unittest.TestCase):
             ["foo"],
         )
 
+    def test_to_list(self):
+        self.assertEqual(
+            utils.to_list("foo"),
+            ["foo"],
+        )
+
+        self.assertEqual(
+            utils.to_list(["foo"]),
+            ["foo"],
+        )
+
+        self.assertEqual(
+            utils.to_list(None),
+            [None],
+        )
+
+        self.assertEqual(
+            utils.to_list(None, wrap_none=False),
+            [],
+        )
+
     def test_merge(self):
         self.assertEqual(
             utils.merge(
@@ -109,6 +130,20 @@ class UtilsTestCase(unittest.TestCase):
                 },
             ),
             OrderedDict((("key", {"alternate": "alternate", "key": "value"}),)),
+        )
+
+    def test_merge_alternate_key_not_present(self):
+        self.assertEqual(
+            utils.merge(
+                {"key": {}},
+                {
+                    "key": {
+                        "prepend_alternate": "a1",
+                        "append_alternate": "a2",
+                    }
+                },
+            ),
+            OrderedDict((("key", {"alternate": ["a1", "a2"]}),)),
         )
 
     def test_merge_skip(self):
