@@ -6,18 +6,31 @@
     "subprojects": [],
     // lookup order
     "lookup_order": [
-        "local",
-        "file",
-        "global",
-        "builtin"
+        "local", // first look in the project settings
+        "file", // then, in the .projections.json file
+        "global", // then the `heuristic_projections` from the package settings
+        // "third_party", //
+        "builtin", // and finally, the `builtin_heuristic_projections`
     ],
     "create_alternate_file_if_missing": true,
-    // built-in heuristic projections
+    // built-in heuristic projections,
+    // DO NOT OVERRIDE THIS!!! instead remove the `builtin` item form the `lookup_order`
+    // so the built-in projections won't be evaluated
     "builtin_heuristic_projections": {
-        "**/*": {
-            "*.py": {
-                "alternate": "{}_test.py",
+        "*.sublime-settings": { // Sublime Text package
+            "sublime-package.json": {
+                "alternate": "{project|basename}.sublime-settings"
+            },
+            "*.sublime-settings": {
+                "alternate": "sublime-package.json"
+            },
+            "messages/*.txt": {
+                "alternate": "messages.json"
             }
+        },
+        "mix.exs&test/test_helper.exs": { // Elixir mix with ExUnit
+        },
+        "mix.exs&spec/spec_helper.exs": { // Elixir mix with ESpec
         }
     }
 }

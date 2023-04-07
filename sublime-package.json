@@ -45,6 +45,33 @@
                                         ]
                                     }
                                 },
+                                "lookup_order": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "default": [
+                                        "local",
+                                        "file",
+                                        "global",
+                                        // "third_party",
+                                        "builtin"
+                                    ],
+                                    "description": "Lookup order",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [
+                                            "local",
+                                            "file",
+                                            "global",
+                                            // "third_party",
+                                            "builtin"
+                                        ]
+                                    }
+                                },
+                                "create_alternate_file_if_missing": {
+                                    "type": "boolean",
+                                    "default": true,
+                                    "description": "Create the alternate file if missing"
+                                }
                             }
                         }
                     },
