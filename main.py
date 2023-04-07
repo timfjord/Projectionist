@@ -27,6 +27,6 @@ class ProjectionistOutputProjectionsCommand(sublime_plugin.TextCommand):
         Plugin(self.view).output_projections()
 
 
-class ProjectionistClearCacheCommand(sublime_plugin.TextCommand):
-    def run(self, _):
+class ProjectionistClearCacheCommand(sublime_plugin.ApplicationCommand):
+    def run(self):
         Plugin.clear_cache()

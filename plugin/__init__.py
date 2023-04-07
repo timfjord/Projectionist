@@ -1,3 +1,5 @@
+import logging
+
 import sublime
 
 from . import cache, settings, status
@@ -5,11 +7,14 @@ from .errors import handle_errors
 from .root import Root
 from .storage import Storage
 
+logger = logging.getLogger(__name__)
+
 
 class Plugin:
     @staticmethod
     def clear_cache():
         cache.clear()
+        logger.info("Cache cleared")
 
     def __init__(self, view):
         self.view = view
