@@ -12,7 +12,10 @@
         "builtin", // and finally, the `builtin_heuristic_projections`
     ],
     "create_alternate_file_if_missing": true,
-    // built-in heuristic projections,
+    // Mapping between a string describing the root of the project and a set of projection.
+    // Will be merged with other projections in the order defined in the `lookup_order`.
+    "heuristic_projections": {},
+    // Built-in heuristic projections
     // DO NOT OVERRIDE THIS!!! instead remove the `builtin` item form the `lookup_order`
     // so the built-in projections won't be evaluated
     "builtin_heuristic_projections": {
