@@ -11,52 +11,60 @@
                         "Projections": {
                             "patternProperties": {
                                 ".*": {
-                                    "type": "object",
-                                    "markdownDescription": "Projection pattern (e.g. `*`, or `tests/**/test_*.py`).  \nFrom a globbing perspective, `*` is actually a stand in for `**/*`.",
-                                    "properties": {
-                                        "alternate": {
-                                            "anyOf": [
-                                                {
-                                                    "type": "string"
-                                                },
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    }
-                                                }
-                                            ],
-                                            "markdownDescription": "Determines the destination of the alternate file (`projectionist_open_alternate` command).  \nIf this is a list, the first readable file will be used."
+                                    "anyOf": [
+                                        {
+                                            "markdownDescription": "Skip this projection",
+                                            "const": "skip"
                                         },
-                                        "prepend_alternate": {
-                                            "anyOf": [
-                                                {
-                                                    "type": "string"
+                                        {
+                                            "type": "object",
+                                            "markdownDescription": "Projection pattern (e.g. `*`, or `tests/**/test_*.py`).  \nFrom a globbing perspective, `*` is actually a stand in for `**/*`.",
+                                            "properties": {
+                                                "alternate": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "markdownDescription": "Determines the destination of the alternate file (`projectionist_open_alternate` command).  \nIf this is a list, the first readable file will be used."
                                                 },
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    }
-                                                }
-                                            ],
-                                            "markdownDescription": "When projections are merged this will be prepended to the `alternate` value.  \nUseful to adjust the value of the existing(built-in, third party) projections."
-                                        },
-                                        "append_alternate": {
-                                            "anyOf": [
-                                                {
-                                                    "type": "string"
+                                                "prepend_alternate": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "markdownDescription": "When projections are merged this will be prepended to the `alternate` value.  \nUseful to adjust the value of the existing(built-in, third party) projections."
                                                 },
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    }
+                                                "append_alternate": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "markdownDescription": "When projections are merged this will be appended to the `alternate` value.  \nUseful to adjust the value of the existing(built-in, third party) projections."
                                                 }
-                                            ],
-                                            "markdownDescription": "When projections are merged this will be appended to the `alternate` value.  \nUseful to adjust the value of the existing(built-in, third party) projections."
+                                            }
                                         }
-                                    }
+                                    ]
                                 }
                             }
                         },
