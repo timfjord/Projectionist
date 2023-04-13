@@ -174,3 +174,9 @@ class UtilsTestCase(unittest.TestCase):
             ),
             OrderedDict((("key", {"alternate": "alternate"}),)),
         )
+
+    def test_replace(self):
+        self.assertEqual(
+            utils.replace("foo-bar_baz/quux", ("-", "_"), ("/", "_")),
+            "foo_bar_baz_quux",
+        )

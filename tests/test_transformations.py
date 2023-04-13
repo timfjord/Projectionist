@@ -59,11 +59,10 @@ class TransformationsTestCase(unittest.TestCase):
         )
 
     def test_snakecase(self):
-        # self.assertEqual(
-        #     transformations.capitalize("FooBar/bazQuux"),
-        #     "foo_bar/baz_quux",
-        # )
-        pass
+        self.assertEqual(
+            transformations.snakecase("FooBar/bazQuux"),
+            "foo_bar/baz_quux",
+        )
 
     def test_dirname(self):
         self.assertEqual(
@@ -88,10 +87,56 @@ class TransformationsTestCase(unittest.TestCase):
         )
 
     def test_singular(self):
-        pass
+        self.assertEqual(
+            transformations.singular("posts"),
+            "post",
+        )
+
+        self.assertEqual(
+            transformations.singular("babies"),
+            "baby",
+        )
+
+        self.assertEqual(
+            transformations.singular("wolves"),
+            "wolf",
+        )
+
+        self.assertEqual(
+            transformations.singular("indices"),
+            "index",
+        )
+
+        self.assertEqual(
+            transformations.singular("statuses"),
+            "status",
+        )
 
     def test_plural(self):
-        pass
+        self.assertEqual(
+            transformations.plural("post"),
+            "posts",
+        )
+
+        self.assertEqual(
+            transformations.plural("baby"),
+            "babies",
+        )
+
+        self.assertEqual(
+            transformations.plural("wolf"),
+            "wolves",
+        )
+
+        self.assertEqual(
+            transformations.plural("index"),
+            "indices",
+        )
+
+        self.assertEqual(
+            transformations.plural("status"),
+            "statuses",
+        )
 
     def test_open(self):
         self.assertEqual(

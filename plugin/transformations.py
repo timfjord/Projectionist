@@ -1,5 +1,7 @@
 import re
 
+from . import utils
+
 
 def dot(value):
     return value.replace("/", ".")
@@ -37,24 +39,11 @@ def capitalize(value):
     return re.sub(r"(^|/)(.)", lambda m: m.group(1) + m.group(2).upper(), value)
 
 
-# function! g:projectionist_transformations.snakecase(input, o) abort
-#   let str = a:input
-#   let str = substitute(str, '\v(\u+)(\u\l)', '\1_\2', 'g')
-#   let str = substitute(str, '\v(\l|\d)(\u)', '\1_\2', 'g')
-#   let str = tolower(str)
-#   return str
-# endfunction
-
-
 def snakecase(value):
-    return re.sub(
-        r"(\u+)(\u\l)",
-        r"\1_\2",
-        re.sub(
-            r"(\l|\d)(\u)",
-            r"\1_\2",
-            value,
-        ),
+    return utils.replace(
+        value,
+        (r"([A-Z]+)([A-Z][a-z])", r"\1_\2"),
+        (r"([a-z]|\d)([A-Z])", r"\1_\2"),
     ).lower()
 
 
@@ -66,34 +55,28 @@ def basename(value):
     return re.sub(r".*[/\\]", "", value)
 
 
-# function! g:projectionist_transformations.singular(input, o) abort
-#   let input = a:input
-#   let input = s:sub(input, '%([Mm]ov|[aeio])@<!ies$', 'ys')
-#   let input = s:sub(input, '[rl]@<=ves$', 'fs')
-#   let input = s:sub(input, '%(nd|rt)@<=ices$', 'exs')
-#   let input = s:sub(input, 's@<!s$', '')
-#   let input = s:sub(input, '%([nrt]ch|tatus|lias|ss)@<=e$', '')
-#   return input
-# endfunction
-
-
 def singular(value):
-    return re.sub(r"([Mm]ov|[aeio])@<!ies$", "ys", re.sub(r"[rl]@<=ves$", "fs", value))
-
-
-# function! g:projectionist_transformations.plural(input, o) abort
-#   let input = a:input
-#   let input = s:sub(input, '[aeio]@<!y$', 'ie')
-#   let input = s:sub(input, '[rl]@<=f$', 've')
-#   let input = s:sub(input, '%(nd|rt)@<=ex$', 'ice')
-#   let input = s:sub(input, '%([osxz]|[cs]h)$', '&e')
-#   let input .= 's'
-#   return input
-# endfunction
+    return utils.replace(
+        value,
+        (r"(?:(?<![Mm]ov)|(?<![aeio]))ies$", "ys"),
+        (r"(?<=[rl])ves$", "fs"),
+        (r"(?<=nd|rt)ices$", "exs"),
+        (r"(?<!s)s$", ""),
+        (r"(?:(?<=[nrt]ch)|(?<=tatus)|(?<=lias)|(?<=ss))e$", ""),
+    )
 
 
 def plural(value):
-    return re.sub(r"[aeio]@<!y$", "ie", re.sub(r"[rl]@<=f$", "ve", value))
+    return (
+        utils.replace(
+            value,
+            (r"(?<![aeio])y$", "ie"),
+            (r"(?<=[rl])f$", "ve"),
+            (r"(?<=nd|rt)ex$", "ice"),
+            (r"([osxz]|[cs]h)$", r"\1e"),
+        )
+        + "s"
+    )
 
 
 def open(_):

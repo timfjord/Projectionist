@@ -1,4 +1,6 @@
+import re
 from collections import OrderedDict
+from functools import reduce
 
 
 def to_unpackable(val):
@@ -52,3 +54,11 @@ def merge(dict1, dict2):
         result[key] = _merge_nested(val, dict2.get(key, {}))
 
     return result
+
+
+def replace(string, *replacements):
+    return reduce(
+        lambda value, args: re.sub(args[0], args[1], value),
+        replacements,
+        string,
+    )
