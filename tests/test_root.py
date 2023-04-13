@@ -147,6 +147,9 @@ class RootTestCase(unittest.TestCase):
             root.contains("**/*.py&__init__.py|**/*_test.py&folder1/__init__.py")
         )
 
+        self.assertTrue(root.contains("!folder1/*.rb"))
+        self.assertTrue(root.contains("folder2/*.py&!folder1/*.rb"))
+
 
 def build_temp_files(tmpfile):
     existing_file = os.path.basename(tmpfile.name)

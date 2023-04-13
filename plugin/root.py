@@ -8,6 +8,7 @@ from .utils import to_unpackable
 class Root:
     OR = "|"
     AND = "&"
+    NOT = "!"
 
     @classmethod
     def find(cls, folders, file, subprojects=[]):
@@ -58,7 +59,17 @@ class Root:
     def contains(self, patterns):
         for pattern in patterns.split(self.OR):
             for glob in pattern.split(self.AND):
-                if not any(self.glob(*glob.split("/"))):
+                should_exist = True
+
+                if glob.startswith(self.NOT):
+                    should_exist = False
+                    glob = glob[1:]
+
+                found = any(self.glob(*glob.split("/")))
+                if not should_exist:
+                    found = not found
+
+                if not found:
                     break
             else:
                 return True
