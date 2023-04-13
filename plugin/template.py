@@ -6,7 +6,7 @@ from .errors import Error
 
 
 class Template:
-    PLACEHOLDER_PATTERN = r"\{(.*?)\}"
+    PLACEHOLDER_PATTERN = r"\{([^\{\}]*)\}"
     TRANSFORMATIONS_SEPARATOR = "|"
     DEFAULT_TRANSFORMATIONS = {
         "dot": transformations.dot,
