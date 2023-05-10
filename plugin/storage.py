@@ -1,4 +1,5 @@
 import json
+from collections import OrderedDict
 
 from . import settings
 from .errors import Error
@@ -16,7 +17,9 @@ class Storage:
     def _find_matched_projections(self, settings):
         result = {}
 
-        for patterns, config in settings.items():
+        # the merge function written in a way that the second hash "overrides" the first hash keys,
+        # so to obey the order of the heuristic projections they should be reversed
+        for patterns, config in reversed(tuple(OrderedDict(settings).items())):
             if self.root.contains(patterns):
                 result = merge(result, config)
 
