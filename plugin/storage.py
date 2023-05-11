@@ -2,6 +2,7 @@ import json
 from collections import OrderedDict
 
 from . import settings
+from .cache import window_cache
 from .errors import Error
 from .projection import Projection
 from .utils import merge
@@ -57,9 +58,7 @@ class Storage:
     def lookup_order(self):
         return reversed(settings.get("lookup_order", type=list, default=[]) or [])
 
-    def test(self):
-        pass
-
+    @window_cache("projections")
     def get_projections(self):
         processed = set()
         result = {}

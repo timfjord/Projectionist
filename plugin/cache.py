@@ -3,13 +3,13 @@ from collections import defaultdict
 
 import sublime
 
-_cache = []
+_lru_cache = []
 _window_cache = defaultdict(dict)
 
 
 def lru_cache(func):
     func = functools.lru_cache(maxsize=None)(func)
-    _cache.append(func)
+    _lru_cache.append(func)
 
     @functools.wraps(func)
     def wrapper_cache(*args, **kwargs):
@@ -30,9 +30,7 @@ def window_cache(key):
             cache_key = "-".join(
                 (
                     key,
-                    str(getattr(args[0], "window_cache_key", None))
-                    if bool(args)
-                    else "",
+                    str(getattr(args[0], "window_cache_key", "")) if bool(args) else "",
                 )
             )
 
@@ -47,7 +45,7 @@ def window_cache(key):
 
 
 def clear():
-    for func in _cache:
+    for func in _lru_cache:
         func.cache_clear()
 
     _window_cache.pop(_get_window_id(), None)

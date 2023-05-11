@@ -2,7 +2,7 @@ import logging
 
 import sublime
 
-from .cache import lru_cache
+from .cache import window_cache
 
 BASE_NAME = "Projectionist.sublime-settings"
 PROJECT_SETTINGS_KEY = "Projectionist"
@@ -14,7 +14,7 @@ def _ensure_dict(d):
     return d if isinstance(d, dict) else {}
 
 
-@lru_cache
+@window_cache("project_settings")
 def project_settings():
     # fmt: off
     return _ensure_dict(
