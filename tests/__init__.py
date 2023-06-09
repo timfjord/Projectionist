@@ -6,6 +6,7 @@ import sublime
 from unittesting import DeferrableTestCase
 
 from Projectionist.plugin import cache, settings
+from Projectionist.plugin.utils import to_unpackable
 
 FIXTURES_PATH = os.path.join(os.path.dirname(__file__), "fixtures")
 ST3 = sublime.version() < "4000"
@@ -13,12 +14,15 @@ ST3 = sublime.version() < "4000"
 
 class SublimeWindowTestCase(DeferrableTestCase):
     settings = {}
+    project_settings = {}
 
     @classmethod
     def setUpClass(cls):
         sublime.run_command("new_window")
         cls.window = sublime.active_window()
-        cls.window.set_project_data({"settings": {settings.PROJECT_SETTINGS_KEY: {}}})
+        cls.window.set_project_data(
+            {"settings": {settings.PROJECT_SETTINGS_KEY: cls.project_settings}}
+        )
 
         sublime.load_settings("Preferences.sublime-settings").set(
             "close_windows_when_empty", False
@@ -33,6 +37,8 @@ class SublimeWindowTestCase(DeferrableTestCase):
     def setUp(self):
         self._settings = sublime.load_settings(settings.BASE_NAME)
         self._setting_keys = set()
+
+        self.setSettings(self.settings)
 
     def tearDown(self):
         for key in self._setting_keys:
@@ -82,3 +88,20 @@ class SublimeViewTestCase(SublimeWindowTestCase):
         self.view.run_command("goto_line", {"line": line})
 
         return line
+
+
+class SublimeProjectTestCase(SublimeViewTestCase):
+    new_file = False
+    folder = None
+
+    _currentFolder = None
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        if cls.folder is None:
+            raise ValueError("folder is missing")
+
+        cls._currentFolder = os.path.join(FIXTURES_PATH, *to_unpackable(cls.folder))
+        cls.window.set_project_data({"folders": [{"path": cls._currentFolder}]})

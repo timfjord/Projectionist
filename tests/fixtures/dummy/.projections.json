@@ -1,0 +1,5 @@
+{
+  "file*.py": {
+    "alternate": "alternate_file{}.py"
+  }
+}
