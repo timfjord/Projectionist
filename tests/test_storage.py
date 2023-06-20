@@ -1,5 +1,7 @@
 import os
+from unittest.mock import patch
 
+from Projectionist.plugin import cache
 from Projectionist.plugin.errors import Error
 from Projectionist.plugin.projection import Projection
 from Projectionist.plugin.root import Root
@@ -49,7 +51,14 @@ class ProjectionTestCase(SublimeWindowTestCase):
         root = Root(os.path.join(FIXTURES_PATH, "dummy"))
         self.storage = Storage(root)
 
-    def test_get_projections_lookup_order(self):
+    # this test should go first, otherwise other tests will fail
+    def test_get_projections_1_invalid_lookup_order_item(self):
+        self.setSettings({"lookup_order": ["invalid"]})
+
+        with self.assertRaises(Error, msg="Invalid lookup name: 'invalid'"):
+            self.storage.get_projections()
+
+    def test_get_projections_2(self):
         projections = self.storage.get_projections()
 
         self.assertEqual(len(projections), 4)
@@ -67,8 +76,11 @@ class ProjectionTestCase(SublimeWindowTestCase):
         # and finally a local projection
         self.assertEqual(projections[3].pattern, "folder3/file3.py")
 
-    def test_get_projections_invalid_lookup_order_item(self):
-        self.setSettings({"lookup_order": ["invalid"]})
+    def test_get_projections_3_cache(self):
+        cache.clear()
+        self.storage.get_projections()
 
-        with self.assertRaises(Error, msg="Invalid lookup name: 'invalid'"):
-            self.storage.get_projections()
+        with patch.object(self.storage, "_get_builtin_projections", return_value={}):
+            projections = self.storage.get_projections()
+
+            self.assertEqual(len(projections), 4)
