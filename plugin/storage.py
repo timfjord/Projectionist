@@ -26,21 +26,21 @@ class Storage:
 
         return result
 
-    def get_builtin_projections(self):
+    def _get_builtin_projections(self):
         return self._find_matched_projections(
             settings.get(
                 "builtin_heuristic_projections", type=dict, default={}, scope="global"
             ),
         )
 
-    def get_global_projections(self):
+    def _get_global_projections(self):
         return self._find_matched_projections(
             settings.get(
                 "heuristic_projections", type=dict, default={}, scope="global"
             ),
         )
 
-    def get_file_projections(self):
+    def _get_file_projections(self):
         projections_json = self.root.file(PROJECTIONS_JSON)
 
         if not projections_json.exists():
@@ -51,7 +51,7 @@ class Storage:
 
             return content or {}
 
-    def get_local_projections(self):
+    def _get_local_projections(self):
         return settings.get("projections", type=dict, default={}, scope="project")
 
     @property
@@ -67,7 +67,7 @@ class Storage:
             if type in processed:
                 continue
 
-            prop = "get_{}_projections".format(type)
+            prop = "_get_{}_projections".format(type)
             if hasattr(self, prop):
                 result = merge(result, getattr(self, prop)())
                 processed.add(type)
