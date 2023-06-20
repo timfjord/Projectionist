@@ -130,13 +130,13 @@ class RootTestCase(unittest.TestCase):
         root = Root(os.path.join(FIXTURES_PATH, "dummy"))
 
         self.assertTrue(root.contains("folder1/file1.py"))
-        self.assertTrue(root.contains("folder4/file4.py|folder1/file1.py"))
+        self.assertTrue(root.contains("folder5/file5.py|folder1/file1.py"))
         self.assertTrue(root.contains("folder2/file2.py&folder1/file1.py"))
         self.assertTrue(
-            root.contains("folder1/file1.py&folder3/file3.py|folder4/file4.py")
+            root.contains("folder1/file1.py&folder3/file3.py|folder5/file5.py")
         )
 
-        self.assertFalse(root.contains("folder1/file1.py&folder4/file4.py"))
+        self.assertFalse(root.contains("folder1/file1.py&folder5/file5.py"))
 
         self.assertTrue(root.contains("**/*.py"))
         self.assertTrue(root.contains("*.py|folder3/file3.py"))
