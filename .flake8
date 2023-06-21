@@ -1,3 +1,4 @@
 [flake8]
+ignore = E203,W503
 exclude = .git,tests/fixtures
 max-line-length = 99

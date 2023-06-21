@@ -1,1 +1,3 @@
-[]
+[
+    // { "keys": ["super+alt+up"], "command": "projectionist_open_alternate" },
+]

@@ -8,6 +8,66 @@
                 "schema": {
                     "$id": "sublime://settings/Projectionist",
                     "definitions": {
+                        "Projections": {
+                            "patternProperties": {
+                                ".*": {
+                                    "anyOf": [
+                                        {
+                                            "markdownDescription": "Skip this projection",
+                                            "const": "skip"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "markdownDescription": "Projection pattern (e.g. `*`, or `tests/**/test_*.py`).  \nFrom a globbing perspective, `*` is actually a stand in for `**/*`.",
+                                            "properties": {
+                                                "alternate": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "markdownDescription": "Determines the destination of the alternate file (`projectionist_open_alternate` command).  \nIf this is a list, the first readable file will be used."
+                                                },
+                                                "prepend_alternate": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "markdownDescription": "When projections are merged this will be prepended to the `alternate` value.  \nUseful to adjust the value of the existing(built-in, third party) projections."
+                                                },
+                                                "append_alternate": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "markdownDescription": "When projections are merged this will be appended to the `alternate` value.  \nUseful to adjust the value of the existing(built-in, third party) projections."
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
                         "PackageConfig": {
                             "properties": {
                                 "log_level": {
@@ -27,10 +87,71 @@
                                     "default": true,
                                     "description": "Show important messages in the sublime status bar"
                                 },
+                                "subprojects": {
+                                    "type": "array",
+                                    "default": [],
+                                    "description": "A list of subprojects",
+                                    "items": {
+                                        "anyOf": [
+                                            {
+                                                "type": "string"
+                                            },
+                                            {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "lookup_order": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "default": [
+                                        "local",
+                                        "file",
+                                        "global",
+                                        "builtin"
+                                    ],
+                                    "description": "Lookup order",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [
+                                            "local",
+                                            "file",
+                                            "global",
+                                            "builtin"
+                                        ]
+                                    }
+                                },
+                                "create_alternate_file_if_missing": {
+                                    "type": "boolean",
+                                    "default": true,
+                                    "description": "Create the alternate file if missing"
+                                }
                             }
                         }
                     },
-                    "$ref": "sublime://settings/Projectionist#/definitions/PackageConfig"
+                    "anyOf": [
+                        {
+                            "$ref": "sublime://settings/Projectionist#/definitions/PackageConfig"
+                        },
+                        {
+                            "properties": {
+                                "heuristic_projections": {
+                                    "markdownDescription": "Mapping between a string describing the root of the project and a set of projection.  \nWill be merged with other projections in the order defined in the `lookup_order`.",
+                                    "default": {},
+                                    "patternProperties": {
+                                        ".*": {
+                                            "markdownDescription": "Files and directories that can be found in the root of a project,  \nwith `&` separating multiple requirements and `|` separating multiple alternatives  \n(e.g. `config/*/production.rb&Gemfile|config/application.rb`).  \nThe `!` prefix near a file or directory forbids rather than requires its presence.",
+                                            "$ref": "sublime://settings/Projectionist#/definitions/Projections"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -42,7 +163,101 @@
                         "settings": {
                             "properties": {
                                 "Projectionist": {
-                                    "$ref": "sublime://settings/Projectionist#/definitions/PackageConfig"
+                                    "anyOf": [
+                                        {
+                                            "$ref": "sublime://settings/Projectionist#/definitions/PackageConfig"
+                                        },
+                                        {
+                                            "properties": {
+                                                "projections": {
+                                                    "markdownDescription": "Local projections (will be merged with other projections in the order defined in the `lookup_order`)",
+                                                    "default": {},
+                                                    "$ref": "sublime://settings/Projectionist#/definitions/Projections"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "file_patterns": [
+                    "/.projections.json"
+                ],
+                "schema": {
+                    "patternProperties": {
+                        ".*": {
+                            "type": "object",
+                            "markdownDescription": "Projection pattern (e.g. `*`, or `tests/**/test_*.py`).  \nFrom a globbing perspective, `*` is actually a stand in for `**/*`.",
+                            "properties": {
+                                "alternate": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ],
+                                    "markdownDescription": "Determines the destination of the alternate file (e.g. `projectionist_open_alternate` command in Sublime Text or `:A` command in Vim).  \nIf this is a list, the first readable file will be used.  \nWill also be used as a default for the `related`."
+                                },
+                                "console": {
+                                    "type": "string",
+                                    "markdownDescription": "Command to run to start a REPL or other interactive shell.  \nWill be defined as `:Console`.  \nThis is useful to set from a `*`` projection or on a simple file glob like `*.js`.  \nWill also be used as a default for `start`.  \nExpansions are shell escaped."
+                                },
+                                "dispatch": {
+                                    "type": "string",
+                                    "markdownDescription": "Default task to use for `:Dispatch` in dispatch.vim.  \nIf not provided, the option for any existing alternate file is used instead.  \nExpansions are shell escaped."
+                                },
+                                "make": {
+                                    "type": "string",
+                                    "markdownDescription": "Sets `makeprg`.  Also loads a `:compiler` plugin if one is available matching the executable name.  \nThis is useful to set from a `*` projection.  \nExpansions are shell escaped."
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "markdownDescription": "Additional directories to prepend to `path`.  \nCan be relative to the project root or absolute.  \nThis is useful to set on a simple file glob like `*.js`."
+                                },
+                                "related": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ],
+                                    "markdownDescription": "Indicates one or more files to search when a navigation command is called without an argument, to find a default destination.  \nRelated files are searched recursively."
+                                },
+                                "start": {
+                                    "type": "string",
+                                    "markdownDescription": "Command to run to \"boot\" the project.  \nExamples include `lein run`, `rails server`, and `foreman start`.  \nIt will be used as a default task for `:Start` in dispatch.vim.  \nThis is useful to set from a `*`` projection.  \nExpansions are shell escaped."
+                                },
+                                "template": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ],
+                                    "markdownDescription": "Array of lines to use when creating a new file."
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "markdownDescription": "Declares the type of file and create a set of navigation commands for opening files that match the glob.  If this option is provided for a literal filename rather than a glob, it is used as the default destination of the navigation command when no argument is given."
                                 }
                             }
                         }
