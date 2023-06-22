@@ -19,14 +19,22 @@ from .plugin import Plugin  # noqa: E402
 
 class ProjectionistOpenAlternateCommand(sublime_plugin.TextCommand):
     def run(self, _):
-        Plugin(self.view).open_alternate()
+        Plugin(self.view.window()).open_alternate(self.view.file_name())
 
 
 class ProjectionistOutputProjectionsCommand(sublime_plugin.TextCommand):
     def run(self, _):
-        Plugin(self.view).output_projections()
+        Plugin(self.view.window()).output_projections()
 
 
 class ProjectionistClearCacheCommand(sublime_plugin.ApplicationCommand):
     def run(self):
         Plugin.clear_cache()
+
+
+class ProjectionistSidebarOpenAlternateCommand(sublime_plugin.WindowCommand):
+    def run(self, files=[], reveal=False):
+        if not files:
+            return
+
+        Plugin(self.window).open_alternate(files[0], focus=not reveal)
