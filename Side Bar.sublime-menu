@@ -1,0 +1,22 @@
+[
+    {
+        "caption": "-"
+    },
+    {
+        "caption": "Open Alternate File",
+        "command": "projectionist_sidebar_open_alternate",
+        "mnemonic": "A",
+        "args": {
+            "files": []
+        }
+    },
+    {
+        "caption": "Reveal Alternate File",
+        "command": "projectionist_sidebar_open_alternate",
+        "mnemonic": "R",
+        "args": {
+            "files": [],
+            "reveal": true
+        }
+    },
+]

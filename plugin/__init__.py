@@ -1,4 +1,5 @@
 import logging
+from functools import partial
 
 import sublime
 
@@ -16,18 +17,18 @@ class Plugin:
         cache.clear()
         logger.info("Cache cleared")
 
-    def __init__(self, view):
-        self.view = view
+    def __init__(self, window):
+        self.window = window
 
     @property
-    def window(self):
-        return self.view.window()
+    def window_folders(self):
+        return self.window.folders()
 
     @handle_errors
-    def open_alternate(self):
+    def open_alternate(self, file_name, folders=[], focus=None):
         root, file = Root.find(
-            self.window.folders(),
-            self.view.file_name(),
+            folders or self.window_folders,
+            file_name,
             settings.get("subprojects", type=list, default=[]),
         )
         storage = Storage(root)
@@ -76,7 +77,9 @@ class Plugin:
         if to_open is None:
             status.update("No alternate file defined")
         else:
-            self.window.open_file(to_open.path)
+            view = self.window.open_file(to_open.path)
+            if focus is True:
+                sublime.set_timeout(partial(self._focus_on_view, view), 0)
 
     def output_projections(self):
         storage = Storage(Root(self.window.folders()[0]))
@@ -86,3 +89,8 @@ class Plugin:
         for projection in storage.get_projections():
             print("  -> {}".format(projection.pattern))
             print("     {}".format(projection.options))
+
+    def _focus_on_view(self, view):
+        while view.is_loading():
+            pass
+        self.window.focus_view(view)
