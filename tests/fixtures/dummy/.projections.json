@@ -1,5 +1,8 @@
 {
   "folder4/file4.py": {
     "alternate": "folder2/file2.py"
+  },
+  "folder1/file1.py": {
+    "alternate": "folder10/file10.py"
   }
 }

@@ -11,7 +11,7 @@
         }
     },
     {
-        "caption": "Reveal Alternate File",
+        "caption": "Go to Alternate File",
         "command": "projectionist_sidebar_open_alternate",
         "mnemonic": "R",
         "args": {

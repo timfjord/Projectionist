@@ -7,14 +7,18 @@ prefix = __package__ + "."  # don't clear the base package
 for module_name in [
     module_name
     for module_name in sys.modules
-    if module_name.startswith(prefix) and module_name != __name__
+    if (module_name.startswith(prefix) and module_name != __name__)
+    or module_name == "projectionist"
 ]:
     del sys.modules[module_name]
 # --- Clear module cache ---
 
 import sublime_plugin  # noqa: E402
 
-from .plugin import Plugin  # noqa: E402
+from .plugin import Plugin, api  # noqa: E402
+
+# Expose public API
+sys.modules["projectionist"] = api
 
 
 class ProjectionistOpenAlternateCommand(sublime_plugin.TextCommand):
