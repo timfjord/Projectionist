@@ -75,3 +75,20 @@ class Storage:
                 raise Error("Invalid lookup name: '{}'".format(type))
 
         return [Projection(pattern, options) for pattern, options in result.items()]
+
+    def find_alternate_file(self, file):
+        first_match = None
+
+        for projection in self.get_projections():
+            alternate_files = projection.find_alternate_file(file)
+
+            if alternate_files is None:
+                continue
+
+            for alternate_file in alternate_files:
+                if alternate_file.exists():
+                    return True, alternate_file
+                elif first_match is None:
+                    first_match = alternate_file
+
+        return False, first_match

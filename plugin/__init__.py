@@ -32,52 +32,36 @@ class Plugin:
             settings.get("subprojects", type=list, default=[]),
         )
         storage = Storage(root)
-        to_open = to_create = None
-
-        for projection in storage.get_projections():
-            alternate_files = projection.find_alternate_file(file)
-
-            if alternate_files is None:
-                continue
-
-            for alternate_file in alternate_files:
-                if alternate_file.exists():
-                    to_open = alternate_file
-                    break
-                elif to_create is None:
-                    to_create = alternate_file
-            else:
-                continue
-
-            break  # this will be executing, only when the loop above breaks
+        exists, alternate = storage.find_alternate_file(file)
+        suffix = "defined" if alternate is None else "found"
 
         if (
-            to_open is None
-            and to_create is not None
+            not exists
+            and alternate is not None
             and settings.get(
                 "create_alternate_file_if_missing", type=bool, default=False
             )
             and sublime.ok_cancel_dialog(
-                "Do you really want to create '{}'?".format(to_create.relpath), "Create"
+                "Do you really want to create '{}'?".format(alternate.relpath), "Create"
             )
         ):
             template = ""
 
             for projection in storage.get_projections():
-                template = projection.find_template(to_create)
+                template = projection.find_template(alternate)
 
                 if template is not None:
                     break
             else:
                 template = ""
 
-            to_create.create(template)
-            to_open = to_create
+            alternate.create(template)
+            exists = True
 
-        if to_open is None:
-            status.update("No alternate file defined")
+        if not exists:
+            status.update("No alternate file {}".format(suffix))
         else:
-            view = self.window.open_file(to_open.path)
+            view = self.window.open_file(alternate.path)
             if focus is True:
                 sublime.set_timeout(partial(self._focus_on_view, view), 0)
 
