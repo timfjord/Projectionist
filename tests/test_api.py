@@ -43,3 +43,18 @@ class PublicAPITestCase(unittest.TestCase):
 
         self.assertFalse(exists)
         self.assertIsNone(alternate)
+
+    def test_find_alternate_file_errors(self):
+        with self.assertRaises(TypeError):
+            find_alternate_file(None, None)
+
+        with self.assertRaises(TypeError):
+            find_alternate_file(None, "smth")
+
+        with self.assertRaises(TypeError):
+            find_alternate_file("smth", None)
+
+        with self.assertRaises(ValueError):
+            find_alternate_file(
+                self.root.join("subfolder1"), self.root.file("subfolder2", "file2.py")
+            )
