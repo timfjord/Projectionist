@@ -19,7 +19,10 @@ def lru_cache(func):
 
 
 def _get_window_id():
-    return getattr(sublime.active_window(), "id", lambda: None)()
+    try:
+        return sublime.active_window().id()
+    except (AttributeError, TypeError):
+        pass
 
 
 def window_cache(key):

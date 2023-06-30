@@ -10,21 +10,17 @@ PROJECT_SETTINGS_KEY = "Projectionist"
 logger = logging.getLogger(__name__)
 
 
-def _ensure_dict(d):
-    return d if isinstance(d, dict) else {}
-
-
 @window_cache("project_settings")
 def project_settings():
-    # fmt: off
-    return _ensure_dict(
-        _ensure_dict(
-            _ensure_dict(
-                sublime.active_window().project_data()
-            ).get('settings', {}),
-        ).get(PROJECT_SETTINGS_KEY, {})
-    )
-    # fmt: on
+    try:
+        return (
+            sublime.active_window()
+            .project_data()
+            .get("settings", {})
+            .get(PROJECT_SETTINGS_KEY, {})
+        )
+    except (AttributeError, TypeError):
+        return {}
 
 
 def settings():
