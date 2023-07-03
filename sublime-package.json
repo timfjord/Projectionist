@@ -129,6 +129,22 @@
                                     "type": "boolean",
                                     "default": true,
                                     "description": "Create the alternate file if missing"
+                                },
+                                "builtin_heuristic_projections": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "default": [
+                                        "elixir",
+                                        "sublime"
+                                    ],
+                                    "markdownDescription": "Built-in heuristic projections.  \nTo disable, remove the item from the list.  \nTo override, remove the desired item from the list and copy/adjust the projections  \nfrom https://github.com/timfjord/Projectionist/tree/main/plugin/builtin_projections  \nto `heuristic_projections`",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [
+                                            "elixir",
+                                            "sublime"
+                                        ]
+                                    }
                                 }
                             }
                         }

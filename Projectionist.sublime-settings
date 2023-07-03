@@ -15,66 +15,13 @@
     // Mapping between a string describing the root of the project and a set of projection.
     // Will be merged with other projections in the order defined in the `lookup_order`.
     "heuristic_projections": {},
-    // Built-in heuristic projections
-    // DO NOT OVERRIDE THIS!!! instead remove the `builtin` item form the `lookup_order`
-    // so the built-in projections won't be evaluated
-    "builtin_heuristic_projections": {
-        "*.sublime-settings": { // Sublime Text package
-            "sublime-package.json": {
-                "alternate": "{project|basename}.sublime-settings"
-            },
-            "*.sublime-settings": {
-                "alternate": "sublime-package.json"
-            },
-            "messages/*.txt": {
-                "alternate": "messages.json"
-            }
-        },
-        "mix.exs": {
-            "mix.exs": {
-                "alternate": "mix.lock"
-            },
-            "mix.lock": {
-                "alternate": "mix.exs"
-            }
-        },
-        "mix.exs&test/test_helper.exs": { // Elixir mix with ExUnit
-            "lib/*.ex": {
-                "alternate": "test/{}_test.exs",
-                "template": [
-                    "defmodule {camelcase|capitalize|dot} do",
-                    "end"
-                ]
-            },
-            "test/*_test.exs": {
-                "alternate": "lib/{}.ex",
-                "template": [
-                    "defmodule {camelcase|capitalize|dot}Test do",
-                    "  use ExUnit.Case",
-                    "",
-                    "  alias {camelcase|capitalize|dot}",
-                    "end"
-                ]
-            }
-        },
-        "mix.exs&spec/spec_helper.exs": { // Elixir mix with ESpec
-            "lib/*.ex": {
-                "alternate": "spec/{}_spec.exs",
-                "template": [
-                    "defmodule {camelcase|capitalize|dot} do",
-                    "end"
-                ]
-            },
-            "spec/*_spec.exs": {
-                "alternate": "lib/{}.ex",
-                "template": [
-                    "defmodule {camelcase|capitalize|dot}Spec do",
-                    "  use ESpec",
-                    "",
-                    "  alias {camelcase|capitalize|dot}",
-                    "end"
-                ]
-            }
-        }
-    }
+    // Built-in heuristic projections.
+    // To disable, remove the item from the list.
+    // To override, remove the desired item from the list and copy/adjust the projections
+    // from https://github.com/timfjord/Projectionist/tree/main/plugin/builtin_projections
+    // to `heuristic_projections`.
+    "builtin_heuristic_projections": [
+        "elixir",
+        "sublime"
+    ]
 }

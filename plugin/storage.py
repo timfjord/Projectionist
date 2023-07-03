@@ -2,6 +2,7 @@ import json
 from collections import OrderedDict
 
 from . import settings
+from .builtin_projections import BUILTIN_PROJECTIONS
 from .cache import window_cache
 from .errors import Error
 from .projection import Projection
@@ -27,11 +28,18 @@ class Storage:
         return result
 
     def _get_builtin_projections(self):
-        return self._find_matched_projections(
-            settings.get(
-                "builtin_heuristic_projections", type=dict, default={}, scope="global"
-            ),
-        )
+        result = {}
+
+        for name in self.builtin_heuristic_projections:
+            if name in BUILTIN_PROJECTIONS:
+                matched_projections = self._find_matched_projections(
+                    BUILTIN_PROJECTIONS[name]
+                )
+                result = dict(result, **matched_projections)
+            else:
+                raise Error("Invalid built-in projection name: '{}'".format(name))
+
+        return result
 
     def _get_global_projections(self):
         return self._find_matched_projections(
@@ -53,6 +61,12 @@ class Storage:
 
     def _get_local_projections(self):
         return settings.get("projections", type=dict, default={}, scope="project")
+
+    @property
+    def builtin_heuristic_projections(self):
+        return (
+            settings.get("builtin_heuristic_projections", type=list, default=[]) or []
+        )
 
     @property
     def lookup_order(self):
