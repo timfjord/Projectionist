@@ -1,6 +1,9 @@
 import logging
 
-from .plugin import settings
+# it is important to preload the cache module even it is not used directly in the file,
+# as otherwise an exception related to missing _get_window_id
+# (from the cache module) will be raised
+from .plugin import cache, settings  # noqa: F401
 
 DEFAULT_LOG_LEVEL = logging.WARNING
 DEFAULT_LOG_LEVEL_NAME = logging.getLevelName(DEFAULT_LOG_LEVEL)
