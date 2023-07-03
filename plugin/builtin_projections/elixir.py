@@ -1,11 +1,7 @@
 BUILTIN_PROJECTIONS = {
     "mix.exs": {
-        "mix.exs": {
-            "alternate": "mix.lock",
-        },
-        "mix.lock": {
-            "alternate": "mix.exs",
-        },
+        "mix.exs": {"alternate": "mix.lock"},
+        "mix.lock": {"alternate": "mix.exs"},
     },
     "mix.exs&test/test_helper.exs": {  # Elixir mix with ExUnit
         "lib/*.ex": {

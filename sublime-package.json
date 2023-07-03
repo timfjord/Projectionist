@@ -135,6 +135,7 @@
                                     "uniqueItems": true,
                                     "default": [
                                         "elixir",
+                                        "ruby",
                                         "sublime"
                                     ],
                                     "markdownDescription": "Built-in heuristic projections.  \nTo disable, remove the item from the list.  \nTo override, remove the desired item from the list and copy/adjust the projections  \nfrom https://github.com/timfjord/Projectionist/tree/main/plugin/builtin_projections  \nto `heuristic_projections`",
@@ -142,6 +143,7 @@
                                         "type": "string",
                                         "enum": [
                                             "elixir",
+                                            "ruby",
                                             "sublime"
                                         ]
                                     }
