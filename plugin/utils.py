@@ -2,6 +2,12 @@ import re
 from collections import OrderedDict
 from functools import reduce
 
+import sublime
+
+ST3 = sublime.version() < "4000"
+SKIP = "skip"
+SPECIAL_KEYS = ("alternate",)
+
 
 def to_unpackable(val):
     return val if isinstance(val, list) or isinstance(val, tuple) else (val,)
@@ -12,10 +18,6 @@ def to_list(val, wrap_none=True):
         return []
 
     return val if isinstance(val, list) else [val]
-
-
-SKIP = "skip"
-SPECIAL_KEYS = ("alternate",)
 
 
 def _merge_nested(dict1, dict2):

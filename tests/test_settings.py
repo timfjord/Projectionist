@@ -1,7 +1,8 @@
 import unittest
 
 from Projectionist.plugin import cache, settings
-from Projectionist.tests import ST3, SublimeWindowTestCase
+from Projectionist.plugin.utils import ST3
+from Projectionist.tests import SublimeWindowTestCase
 
 
 class SettingsTestCase(SublimeWindowTestCase):

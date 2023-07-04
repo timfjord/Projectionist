@@ -7,11 +7,14 @@ from . import cache, settings, status
 from .errors import handle_errors
 from .root import Root
 from .storage import Storage
+from .utils import ST3
 
 logger = logging.getLogger(__name__)
 
 
 class Plugin:
+    SIDE_BY_SIDE = "side_by_side"
+
     @staticmethod
     def clear_cache():
         cache.clear()
@@ -25,7 +28,7 @@ class Plugin:
         return self.window.folders()
 
     @handle_errors
-    def open_alternate(self, file_name, folders=[], focus=None):
+    def open_alternate(self, file_name, folders=[], focus=None, mode=None):
         root, file = Root.find(
             folders or self.window_folders,
             file_name,
@@ -61,7 +64,11 @@ class Plugin:
         if not exists:
             status.update("No alternate file {}".format(suffix))
         else:
-            view = self.window.open_file(alternate.path)
+            flags = 0
+            if mode == self.SIDE_BY_SIDE and not ST3:
+                flags |= sublime.ADD_TO_SELECTION
+
+            view = self.window.open_file(alternate.path, flags=flags)
             if focus is True:
                 sublime.set_timeout(partial(self._focus_on_view, view), 0)
 

@@ -1,3 +1,4 @@
 [
     // { "keys": ["super+alt+up"], "command": "projectionist_open_alternate" },
+    // { "keys": ["super+alt+shift+up"], "command": "projectionist_open_alternate", "args": { "mode": "side_by_side" } },
 ]
