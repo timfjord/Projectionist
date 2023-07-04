@@ -22,8 +22,8 @@ sys.modules["projectionist"] = api
 
 
 class ProjectionistOpenAlternateCommand(sublime_plugin.TextCommand):
-    def run(self, _):
-        Plugin(self.view.window()).open_alternate(self.view.file_name())
+    def run(self, _, mode=None):
+        Plugin(self.view.window()).open_alternate(self.view.file_name(), mode=mode)
 
 
 class ProjectionistOutputProjectionsCommand(sublime_plugin.TextCommand):
