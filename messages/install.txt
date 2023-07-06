@@ -1,0 +1,11 @@
+# Projectionist
+
+Go to an alternate file and more.
+
+## Features
+
+- jump between test and implementation files
+- open/jump to an alternate file from the SideBar
+- `.projections.json` file support (including JSON schema validation)
+- built-in projections for Elixir, Ruby, and Sublime package development
+- work on all platforms

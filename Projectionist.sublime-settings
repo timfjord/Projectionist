@@ -8,8 +8,8 @@
     "lookup_order": [
         "local", // first look in the project settings
         "file", // then, in the .projections.json file
-        "global", // then the `heuristic_projections` from the package settings
-        "builtin", // and finally, the `builtin_heuristic_projections`
+        "global", // then, the `heuristic_projections` from the package settings
+        "builtin", // and finally, the built-in heuristic projections
     ],
     "create_alternate_file_if_missing": true,
     // Mapping between a string describing the root of the project and a set of projection.
