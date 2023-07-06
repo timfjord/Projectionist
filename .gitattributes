@@ -2,3 +2,4 @@
 # archive files. See http://git-scm.com/docs/gitattributes for details.
 
 /tests/             export-ignore
+/docs/              export-ignore

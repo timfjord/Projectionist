@@ -8,7 +8,7 @@ Go to an alternate file and more.
 ## Features
 
 - jump between test and implementation files
-- open/jump to an alternate file from the SideBar
+- open/jump to an alternate file from the Side Bar
 - `.projections.json` file support (including JSON schema validation)
 - built-in projections for Elixir, Ruby, and Sublime package development
 - work on all platforms
@@ -25,6 +25,15 @@ The package implements the logic that was originally introduced by [Tim Pope](ht
 And the main idea is to:
 
 > provide granular project configuration using "projections".
+
+The package exposes the following commands to work with projections:
+
+- `projectionist_open_alternate` - open an alternate file for the current file.  
+In Sublime Text 4 this command supports `"mode": "side_by_side"`, to open an alternate file in a side-by-side view.
+This command is also available in the Command Palette (`Projectionist: Open alternate`) as well as in the Side Bar.
+In the Side Bar there is also an option to jump(reveal in Side Bar) an alternate file rather than open it.
+
+Check [Default.sublime-commands](https://github.com/timfjord/Projectionist/blob/main/Default.sublime-commands) to see the list of all available commands.
 
 ### What are projections?
 
