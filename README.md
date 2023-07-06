@@ -355,3 +355,7 @@ A subproject can be either a string or an array of strings(the path separator wi
 ## Credits
 
 `Projectionist` is a Sublime Text implementation of the [vim-projectionist](https://github.com/tpope/vim-projectionist) plugin so all credits go to the authors and maintainers of this awesome Vim plugin.
+
+## Demo
+
+![Demo](docs/media/demo.gif)
