@@ -21,15 +21,15 @@ Go to an alternate file and more.
 
 ## Usage
 
-The package implements the logic that was originally introduced by [Tim Pope](https://github.com/tpope) in his [vim-projectionist](https://github.com/tpope/vim-projectionist) plugin. 
+The package implements the logic that was originally introduced by [Tim Pope](https://github.com/tpope) in his [vim-projectionist](https://github.com/tpope/vim-projectionist) plugin.
 And the main idea is to:
 
 > provide granular project configuration using "projections".
 
 ### What are projections?
 
-Projections are maps from file names and globs to sets of properties describing the file.
-The simplest way to define them is to create a `.projections.json` in the root of the project, 
+Projections are maps from filenames and globs to sets of properties describing the file.
+The simplest way to define them is to create a `.projections.json` in the root of the project,
 but there are other ways to define projection too (see [Sublime Text integration section](#sublime-text-integration)).  
 The package ships with a JSON schema for the `.projections.json` file to provide validation and auto-completion (requires [LSP-json](https://github.com/sublimelsp/LSP-json) package).
 
@@ -78,7 +78,7 @@ For advanced cases, you can include both globs explicitly: `test/**/test_*.rb`.
 When expanding with `{}`, the `**` and `*` portions are joined with a slash.
 If necessary, the dirname and basename expansions can be used to split the value back apart.
 
-As of now, the package supports only some of the properties from the original implementation, 
+As of now, the package supports only some of the properties from the original implementation,
 but support to more properties will be added in the future.
 Here are the properties that are currently supported:
 
@@ -129,7 +129,7 @@ The package supports projections from the following sources:
 
 - `local` - projections defined in the project config file (e.g. `MyProject.sublime-project`)
 - `file` - projections defined in the `.projections.json` file
-- `global` - heuristic projections defined in the global settings 
+- `global` - heuristic projections defined in the global settings
 - `builtin` - built-in heuristic projections that ship with the package
 
 The lookup order is determined by the `lookup_order` setting and it is:
@@ -171,11 +171,11 @@ Given the number of projection sources, the package provides the `projectionist_
 to output all the projections to the Sublime Text console.
 
 The `lookup_order` also determines how projections with the same pattern are handled.
-So, for example, if the same pattern is defined in multiple sources, 
+So, for example, if the same pattern is defined in multiple sources,
 the properties will be merged obeying the order defined in the `lookup_order` setting.  
 So, for example, if there is a local projection:
 
-```
+```json
 {
   "lib/*.ex": {
     "alternate": "test/{}_test.exs",
@@ -186,7 +186,7 @@ So, for example, if there is a local projection:
 
 and a built-in projection:
 
-```
+```json
 {
   "lib/*.ex": {
     "alternate": "spec/{}_spec.exs",
@@ -197,7 +197,7 @@ and a built-in projection:
 
 the resulting projection will be:
 
-```
+```json
 {
   "lib/*.ex": {
     "alternate": "test/{}_test.exs",
@@ -209,7 +209,7 @@ the resulting projection will be:
 
 And to avoid overriding projection defined on deeper levels, the `append`/`prepend` prefix can be used, for example:
 
-```
+```json
 {
   "lib/*.ex": {
     "prepend_alternate": "spec/{}_spec.exs",
@@ -220,7 +220,7 @@ And to avoid overriding projection defined on deeper levels, the `append`/`prepe
 
 will result in:
 
-```
+```json
 {
   "lib/*.ex": {
     "alternate": [
@@ -271,6 +271,7 @@ The keys of the dictionary are files and directories that can be found in the ro
 You can also prefix a file or directory with `!` to forbid rather than require its presence.
 
 In the example below, the first key requires a file named `mix.exs` and a file named `test/test_helper.exs`.
+
 ```json
 {
   "heuristic_projections": {
@@ -301,9 +302,9 @@ In the example below, the first key requires a file named `mix.exs` and a file n
 
 The package comes with the following list of built-in projections and they are enabled by default:
 
-- `elixir` (see https://github.com/timfjord/Projectionist/blob/main/plugin/builtin_projections/elixir.py)
-- `ruby` (see https://github.com/timfjord/Projectionist/blob/main/plugin/builtin_projections/ruby.py)
-- `sublime` (see https://github.com/timfjord/Projectionist/blob/main/plugin/builtin_projections/sublime.py)
+- [`elixir`](https://github.com/timfjord/Projectionist/blob/main/plugin/builtin_projections/elixir.py)
+- [`ruby`](https://github.com/timfjord/Projectionist/blob/main/plugin/builtin_projections/ruby.py)
+- [`sublime`](https://github.com/timfjord/Projectionist/blob/main/plugin/builtin_projections/sublime.py)
 
 To disable some of the built-in projections, remove them from the `builtin_heuristic_projections` setting:
 
