@@ -1,4 +1,5 @@
 import logging
+import time
 from functools import partial
 
 import sublime
@@ -13,7 +14,12 @@ logger = logging.getLogger(__name__)
 
 
 class Plugin:
-    SIDE_BY_SIDE = "side_by_side"
+    MODE_SIDE_BY_SIDE = "side_by_side"
+    FOCUS_VIEW = "view"
+    FOCUS_SIDEBAR = "sidebar"
+    OPEN_VIEW_TIMEOUT = 3  # seconds
+    OPEN_VIEW_WAIT_FOR = 0.2  # 200 ms
+    OPEN_VIEW_MAX_ATTEMPTS = int(OPEN_VIEW_TIMEOUT / OPEN_VIEW_WAIT_FOR)
 
     @staticmethod
     def clear_cache():
@@ -65,12 +71,22 @@ class Plugin:
             status.update("No alternate file {}".format(suffix))
         else:
             flags = 0
-            if mode == self.SIDE_BY_SIDE and not ST3:
+            if mode == self.MODE_SIDE_BY_SIDE and not ST3:
                 flags |= sublime.ADD_TO_SELECTION
 
             view = self.window.open_file(alternate.path, flags=flags)
-            if focus is True:
-                sublime.set_timeout(partial(self._focus_on_view, view), 0)
+            if focus == self.FOCUS_VIEW:
+                self._on_view_loaded(
+                    view,
+                    lambda view: self.window.focus_view(view),
+                )
+            elif focus == self.FOCUS_SIDEBAR:
+                self._on_view_loaded(
+                    view,
+                    lambda _: sublime.set_timeout_async(
+                        partial(self.window.run_command, "focus_side_bar"), 100
+                    ),
+                )
 
     def output_projections(self):
         storage = Storage(Root(self.window.folders()[0]))
@@ -81,7 +97,19 @@ class Plugin:
             print("  -> {}".format(projection.pattern))
             print("     {}".format(projection.options))
 
-    def _focus_on_view(self, view):
-        while view.is_loading():
-            pass
-        self.window.focus_view(view)
+    def _on_view_loaded(self, view, callback):
+        def on_load(view, callback):
+            i = 0
+
+            while view.is_loading() and i < self.OPEN_VIEW_MAX_ATTEMPTS:
+                i += 1
+                time.sleep(self.OPEN_VIEW_WAIT_FOR)
+
+            if view.is_loading():
+                logger.error(
+                    "{} is still loading after {}s".format(view, self.OPEN_VIEW_TIMEOUT)
+                )
+            else:
+                callback(view)
+
+        sublime.set_timeout_async(partial(on_load, view, callback), 0)

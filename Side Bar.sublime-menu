@@ -3,17 +3,17 @@
         "caption": "-"
     },
     {
-        "caption": "Open Alternate File",
+        "caption": "Open Alternate",
         "command": "projectionist_sidebar_open_alternate",
-        "mnemonic": "A",
+        "mnemonic": "O",
         "args": {
             "files": []
         }
     },
     {
-        "caption": "Go to Alternate File",
+        "caption": "Go to Alternate",
         "command": "projectionist_sidebar_open_alternate",
-        "mnemonic": "R",
+        "mnemonic": "G",
         "args": {
             "files": [],
             "reveal": true

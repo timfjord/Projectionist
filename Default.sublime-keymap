@@ -1,4 +1,5 @@
 [
     // { "keys": ["super+alt+up"], "command": "projectionist_open_alternate" },
+    // { "keys": ["UNBOUND"], "command": "projectionist_open_alternate", "args": { "reveal": true } },
     // { "keys": ["super+alt+shift+up"], "command": "projectionist_open_alternate", "args": { "mode": "side_by_side" } },
 ]

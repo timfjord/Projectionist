@@ -22,8 +22,12 @@ sys.modules["projectionist"] = api
 
 
 class ProjectionistOpenAlternateCommand(sublime_plugin.TextCommand):
-    def run(self, _, mode=None):
-        Plugin(self.view.window()).open_alternate(self.view.file_name(), mode=mode)
+    def run(self, _, mode=None, reveal=None):
+        Plugin(self.view.window()).open_alternate(
+            self.view.file_name(),
+            mode=mode,
+            focus=(Plugin.FOCUS_SIDEBAR if reveal else None),
+        )
 
 
 class ProjectionistOutputProjectionsCommand(sublime_plugin.TextCommand):
@@ -41,4 +45,6 @@ class ProjectionistSidebarOpenAlternateCommand(sublime_plugin.WindowCommand):
         if not files:
             return
 
-        Plugin(self.window).open_alternate(files[0], focus=not reveal)
+        Plugin(self.window).open_alternate(
+            files[0], focus=(Plugin.FOCUS_SIDEBAR if reveal else Plugin.FOCUS_VIEW)
+        )
