@@ -8,4 +8,5 @@ Go to an alternate file and more.
 - open/jump to an alternate file from the SideBar
 - `.projections.json` file support (including JSON schema validation)
 - built-in projections for Elixir, Ruby, and Sublime package development
+- public API for other packages to use
 - work on all platforms

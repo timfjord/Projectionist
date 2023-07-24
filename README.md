@@ -11,6 +11,7 @@ Go to an alternate file and more.
 - open/jump to an alternate file from the Side Bar
 - `.projections.json` file support (including JSON schema validation)
 - built-in projections for Elixir, Ruby, and Sublime package development
+- public API for other packages to use
 - work on all platforms
 
 ## Installation
@@ -357,6 +358,34 @@ Another way to handle nested projects is to use the `subprojects` settings (usua
 ```
 
 A subproject can be either a string or an array of strings(the path separator will be added automatically in this case).
+
+## Public API
+
+To allow other packages to find alternate files and more, the package exposes the `projectionist` module that acts as the public API.  
+Check [`plugin/api.py`](https://github.com/timfjord/Projectionist/blob/main/plugin/api.py) for implementation details and [`tests/test_api.py`](https://github.com/timfjord/Projectionist/blob/main/tests/test_api.py) for test cases.
+
+### `find_alternate_file`
+
+Allows to find an alternate file for a given file and root directory.  
+Returns a tuple of `(exists, alternate)` where `exists` is a boolean indicating whether the alternate file exists and `alternate` is the path to the alternate file or `None` if no alternate file is defined.
+
+```python
+try:
+    from projectionist import find_alternate_file
+
+    root = "~/code/project"
+    file = "~/code/project/folder1/file1.py"
+    exists, alternate = find_alternate_file(root, file)
+
+    if alternate is None:
+        print("No alternate file defined")
+    elif exists:
+        print("Alternate file exists")
+    else:
+        print("Alternate file defined but does not exist")
+except ImportError:
+    print("Projectionist is not installed")
+```
 
 ## Roadmap
 
