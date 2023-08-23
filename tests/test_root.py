@@ -223,6 +223,15 @@ class FileTestCase(unittest.TestCase):
             self.assertFalse(File(root, "uNkn0wn.py").exists())
             self.assertFalse(File(subfolder, existing_dir).exists())
 
+    def test_create(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Root(tmpdir)
+            file = root.file("folder", "subfolder", "file.txt")
+            file.create("content")
+
+            with open(str(file)) as file:
+                self.assertIn("content", file.read())
+
 
 class GlobTestCase(unittest.TestCase):
     def test_iter(self):
