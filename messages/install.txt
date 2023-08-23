@@ -1,8 +1,6 @@
-# Projectionist
-
 Go to an alternate file and more.
 
-## Features
+# Features
 
 - jump between test and implementation files
 - open/jump to an alternate file from the SideBar
