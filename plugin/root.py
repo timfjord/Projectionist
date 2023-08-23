@@ -1,4 +1,4 @@
-import os.path
+import os
 
 from . import glob2
 from .errors import Error
@@ -107,6 +107,7 @@ class File(RelativePath):
         return os.path.isfile(self.path)
 
     def create(self, content):
+        os.makedirs(os.path.dirname(str(self)), exist_ok=True)
         with open(self.path, "x") as file:
             file.write(content)
 
