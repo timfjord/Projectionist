@@ -60,7 +60,7 @@ class Plugin:
             template = ""
 
             for projection in storage.get_projections():
-                template = projection.find_template(alternate)
+                template = projection.get("template", alternate)
 
                 if template is not None:
                     break
