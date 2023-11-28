@@ -86,6 +86,9 @@ BUILTIN_PROJECTIONS = {
             "alternate": ["config/application.rb", "config/environment.rb"],
             "type": "initializer",
         },
+        "config/database.yml": {
+            "alternate": ["config/application.rb", "config/environment.rb"]
+        },
         "gems.locked": {"alternate": "gems.rb"},
         "gems.rb": {"alternate": "gems.locked", "type": "lib"},
         "lib/*.rb": {"type": "lib"},
@@ -104,8 +107,16 @@ BUILTIN_PROJECTIONS = {
         },
         "features/support/env.rb": {"type": "integration test"},
     },
-    "spec/*_spec.rb": {  # RSpec
+    "spec/**/*_spec.rb": {  # RSpec
         "spec/*_spec.rb": {"alternate": "app/{}.rb"},
+        "app/controllers/*_controller.rb": {
+            "alternate": [
+                "spec/controllers/{}_controller_spec.rb",
+                "spec/requests/{}_spec.rb",
+                "spec/features/{}_spec.rb",
+                "spec/integration/{}_spec.rb",
+            ]
+        },
         "spec/controllers/*_spec.rb": {
             "template": [
                 "require 'rails_helper'",
@@ -116,6 +127,7 @@ BUILTIN_PROJECTIONS = {
             "type": "functional test",
         },
         "spec/features/*_spec.rb": {
+            "alternate": "app/controllers/{}_controller.rb",
             "template": [
                 "require 'rails_helper'",
                 "",
@@ -123,6 +135,21 @@ BUILTIN_PROJECTIONS = {
                 "end",
             ],
             "type": "integration test",
+        },
+        "app/jobs/*_job.rb": {
+            "alternate": "spec/jobs/{}_job_spec.rb",
+        },
+        "spec/jobs/*_spec.rb": {
+            "template": [
+                "require 'rails_helper'",
+                "",
+                "RSpec.describe {camelcase|capitalize|colons} do",
+                "end",
+            ],
+            "type": "unit test",
+        },
+        "app/helpers/*_helper.rb": {
+            "alternate": "spec/helpers/{}_helper_spec.rb",
         },
         "spec/helpers/*_spec.rb": {
             "template": [
@@ -134,6 +161,7 @@ BUILTIN_PROJECTIONS = {
             "type": "unit test",
         },
         "spec/integration/*_spec.rb": {
+            "alternate": "app/controllers/{}_controller.rb",
             "template": [
                 "require 'rails_helper'",
                 "",
@@ -142,7 +170,12 @@ BUILTIN_PROJECTIONS = {
             ],
             "type": "integration test",
         },
-        "spec/lib/*_spec.rb": {"alternate": "lib/{}.rb"},
+        "lib/*.rb": {"alternate": "spec/lib/{}_spec.rb"},
+        "app/lib/*.rb": {"alternate": "spec/lib/{}_spec.rb"},
+        "spec/lib/*_spec.rb": {"alternate": ["lib/{}.rb", "app/lib/{}.rb"]},
+        "app/mailers/*.rb": {
+            "alternate": "spec/mailers/{}_spec.rb",
+        },
         "spec/mailers/*_spec.rb": {
             "affinity": "controller",
             "template": [
@@ -161,6 +194,9 @@ BUILTIN_PROJECTIONS = {
                 "end",
             ],
         },
+        "app/models/*.rb": {
+            "alternate": "spec/models/{}_spec.rb",
+        },
         "spec/models/*_spec.rb": {
             "affinity": "model",
             "template": [
@@ -173,6 +209,7 @@ BUILTIN_PROJECTIONS = {
         },
         "spec/rails_helper.rb": {"type": "integration test"},
         "spec/requests/*_spec.rb": {
+            "alternate": "app/controllers/{}_controller.rb",
             "template": [
                 "require 'rails_helper'",
                 "",
@@ -181,10 +218,20 @@ BUILTIN_PROJECTIONS = {
             ],
             "type": "integration test",
         },
+        "app/serializers/*_serializer.rb": {
+            "alternate": "spec/serializers/{}_serializer_spec.rb",
+        },
         "spec/spec_helper.rb": {"type": "integration test"},
     },
-    "test/*_test.rb": {  # MiniTest
+    "test/**/*_test.rb": {  # MiniTest
         "test/*_test.rb": {"alternate": "app/{}.rb"},
+        "app/controllers/*_controller.rb": {
+            "alternate": [
+                "test/controllers/{}_controller_test.rb",
+                "test/functional/{}_test.rb",
+                "test/integration/{}_test.rb",
+            ]
+        },
         "test/controllers/*_test.rb": {
             "template": [
                 "require 'test_helper'",
@@ -204,6 +251,25 @@ BUILTIN_PROJECTIONS = {
             ],
             "type": "functional test",
         },
+        "app/jobs/*_job.rb": {
+            "alternate": "test/jobs/{}_job_test.rb",
+        },
+        "test/jobs/*_test.rb": {
+            "affinity": "job",
+            "template": [
+                "require 'test_helper'",
+                "",
+                "class {camelcase|capitalize|colons}Test < ActiveJob::TestCase",
+                "end",
+            ],
+            "type": "unit test",
+        },
+        "app/helpers/*_helper.rb": {
+            "alternate": [
+                "test/helpers/{}_helper_test.rb",
+                "test/unit/helpers/*_helper_test.rb",
+            ],
+        },
         "test/helpers/*_test.rb": {
             "template": [
                 "require 'test_helper'",
@@ -214,6 +280,7 @@ BUILTIN_PROJECTIONS = {
             "type": "unit test",
         },
         "test/integration/*_test.rb": {
+            "alternate": "app/controllers/{}_controller.rb",
             "template": [
                 "require 'test_helper'",
                 "",
@@ -222,7 +289,16 @@ BUILTIN_PROJECTIONS = {
             ],
             "type": "integration test",
         },
-        "test/lib/*_test.rb": {"alternate": "lib/{}.rb"},
+        "lib/*.rb": {
+            "alternate": ["test/lib/{}_test.rb", "test/unit/*_test.rb"],
+        },
+        "app/lib/*.rb": {
+            "alternate": ["test/lib/{}_test.rb", "test/unit/*_test.rb"],
+        },
+        "test/lib/*_test.rb": {"alternate": ["lib/{}.rb", "app/lib/{}.rb"]},
+        "app/mailers/*.rb": {
+            "alternate": "test/mailers/{}_test.rb",
+        },
         "test/mailers/*_test.rb": {
             "affinity": "model",
             "template": [
@@ -241,6 +317,9 @@ BUILTIN_PROJECTIONS = {
                 "end",
             ],
         },
+        "app/models/*.rb": {
+            "alternate": ["test/models/{}_test.rb", "test/unit/*_test.rb"],
+        },
         "test/models/*_test.rb": {
             "affinity": "model",
             "template": [
@@ -251,20 +330,10 @@ BUILTIN_PROJECTIONS = {
             ],
             "type": "unit test",
         },
-        "test/jobs/*_test.rb": {
-            "affinity": "job",
-            "template": [
-                "require 'test_helper'",
-                "",
-                "class {camelcase|capitalize|colons}Test < ActiveJob::TestCase",
-                "end",
-            ],
-            "type": "unit test",
-        },
         "test/test_helper.rb": {"type": "integration test"},
         "test/unit/*_test.rb": {
             "affinity": "model",
-            "alternate": ["app/models/{}.rb", "lib/{}.rb"],
+            "alternate": ["app/models/{}.rb", "lib/{}.rb", "app/lib/{}.rb"],
             "template": [
                 "require 'test_helper'",
                 "",
@@ -278,7 +347,7 @@ BUILTIN_PROJECTIONS = {
             "alternate": "app/helpers/{}_helper.rb",
         },
     },
-    "spec/acceptance/*.feature": {  # Turnip
+    "spec/acceptance/**/*.feature": {  # Turnip
         "spec/acceptance/*.feature": {
             "template": ["Feature: {underscore|capitalize|blank}"],
             "type": "integration test",

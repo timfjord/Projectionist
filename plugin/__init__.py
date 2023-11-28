@@ -51,7 +51,10 @@ class Plugin:
                 "create_alternate_file_if_missing", type=bool, default=False
             )
             and sublime.ok_cancel_dialog(
-                "Do you really want to create '{}'?".format(alternate.relpath), "Create"
+                "Do you really want to create '{}' in '{}'?".format(
+                    alternate.relpath, root
+                ),
+                "Create",
             )
         ):
             template = ""
