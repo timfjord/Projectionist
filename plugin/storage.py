@@ -20,7 +20,7 @@ class Storage:
         result = {}
 
         # the merge function written in a way that the second hash "overrides" the first hash keys,
-        # so to obey the order of the heuristic projections they should be reversed
+        # so in order to obey the order of the heuristic projections they should be reversed
         for patterns, config in reversed(tuple(OrderedDict(settings).items())):
             if self.root.contains(patterns):
                 result = merge(result, config)
