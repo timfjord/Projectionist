@@ -65,6 +65,14 @@ BUILTIN_PROJECTIONS = {
             ],
             "type": "serializer",
         },
+        "test/mailers/previews/*_preview.rb": {
+            "affinity": "controller",
+            "alternate": "app/mailers/{}.rb",
+            "template": [
+                "class {camelcase|capitalize|colons}Preview < ActionMailer::Preview",
+                "end",
+            ],
+        },
         "config/*.yml": {
             "alternate": [
                 "config/{}.example.yml",
@@ -174,7 +182,11 @@ BUILTIN_PROJECTIONS = {
         "app/lib/*.rb": {"alternate": "spec/lib/{}_spec.rb"},
         "spec/lib/*_spec.rb": {"alternate": ["lib/{}.rb", "app/lib/{}.rb"]},
         "app/mailers/*.rb": {
-            "alternate": "spec/mailers/{}_spec.rb",
+            "alternate": [
+                "spec/mailers/{}_spec.rb",
+                "spec/mailers/previews/{}_preview.rb",
+                "test/mailers/previews/{}_preview.rb",
+            ],
         },
         "spec/mailers/*_spec.rb": {
             "affinity": "controller",
@@ -297,7 +309,10 @@ BUILTIN_PROJECTIONS = {
         },
         "test/lib/*_test.rb": {"alternate": ["lib/{}.rb", "app/lib/{}.rb"]},
         "app/mailers/*.rb": {
-            "alternate": "test/mailers/{}_test.rb",
+            "alternate": [
+                "test/mailers/{}_test.rb",
+                "test/mailers/previews/{}_preview.rb",
+            ]
         },
         "test/mailers/*_test.rb": {
             "affinity": "model",
@@ -308,14 +323,6 @@ BUILTIN_PROJECTIONS = {
                 "end",
             ],
             "type": "functional test",
-        },
-        "test/mailers/previews/*_preview.rb": {
-            "affinity": "controller",
-            "alternate": "app/mailers/{}.rb",
-            "template": [
-                "class {camelcase|capitalize|colons}Preview < ActionMailer::Preview",
-                "end",
-            ],
         },
         "app/models/*.rb": {
             "alternate": ["test/models/{}_test.rb", "test/unit/*_test.rb"],
