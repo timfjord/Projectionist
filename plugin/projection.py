@@ -54,21 +54,13 @@ class Projection:
 
         return MatchedProjection(file, self, match)
 
-    def find_alternate_file(self, file):
-        if not bool(self.alternate):
+    def get(self, type, file):
+        if not bool(getattr(self, type)):
             return None
 
         match = self.match(file)
 
-        return match.alternate if match else None
-
-    def find_template(self, file):
-        if not bool(self.template):
-            return None
-
-        match = self.match(file)
-
-        return match.template if match else None
+        return getattr(match, type) if match else None
 
 
 class MatchedProjection:
