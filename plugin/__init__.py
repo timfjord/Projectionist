@@ -92,13 +92,14 @@ class Plugin:
                 )
 
     def output_projections(self):
-        storage = Storage(Root(self.window.folders()[0]))
+        for folder in self.window_folders:
+            storage = Storage(Root(folder))
 
-        print("\nProjections for '{}':\n".format(storage.root))
+            print("\nProjections for '{}':\n".format(storage.root))
 
-        for projection in storage.get_projections():
-            print("  -> {}".format(projection.pattern))
-            print("     {}".format(projection.options))
+            for projection in storage.get_projections():
+                print("  -> {}".format(projection.pattern))
+                print("     {}".format(projection.options))
 
     def _on_view_loaded(self, view, callback):
         def on_load(view, callback):
