@@ -94,7 +94,7 @@ class Storage:
         first_match = None
 
         for projection in self.get_projections():
-            alternate_files = projection.find_alternate_file(file)
+            alternate_files = projection.get("alternate", file)
 
             if alternate_files is None:
                 continue

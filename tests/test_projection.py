@@ -123,6 +123,29 @@ class ProjectionTestCase(unittest.TestCase):
             "",
         )
 
+    def test_get(self):
+        self.assertEqual(
+            list(
+                Projection("*", {"alternate": "{}"}).get(
+                    "alternate", self.root.file("foo.py")
+                )
+            ),
+            [self.root.file("foo.py")],
+        )
+
+    def test_get_missing(self):
+        self.assertIsNone(
+            Projection("*", {"template": "smth"}).get(
+                "alternate", self.root.file("foo.py")
+            )
+        )
+
+    def test_get_missing_attribute(self):
+        with self.assertRaises(AttributeError):
+            Projection("*", {"invalid": "smth"}).get(
+                "invalid", self.root.file("foo.py")
+            )
+
 
 class TestMatchedProjection(unittest.TestCase):
     def setUp(self):
